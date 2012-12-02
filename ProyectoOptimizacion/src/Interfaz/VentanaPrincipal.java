@@ -35,18 +35,20 @@ public class VentanaPrincipal extends JFrame {
     }
     
     public void agregarEventos(){
-        
+        manejador = new Manejador();
     }
     
-    
+    /*
+     
+    */
     private class Manejador implements ActionListener{
 
         @Override
-        public void actionPerformed(ActionEvent ae) {
+        public void actionPerformed(ActionEvent e) {
             
-            if(ae.getSource()==""){
+            if(e.getSource()==""){
             
-            }else if(ae.getSource()=="."){
+            }else if(e.getSource()=="."){
             }
             
         }
