@@ -2,6 +2,8 @@
 package Interfaz;
 
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 
 /**
@@ -9,7 +11,9 @@ import javax.swing.JFrame;
  * @author Edgar Andrés Moncada
  */
 public class VentanaPrincipal extends JFrame {
-
+    
+    Manejador manejador;
+    
     public VentanaPrincipal() throws HeadlessException {
         
         super();
@@ -30,6 +34,25 @@ public class VentanaPrincipal extends JFrame {
         
     }
     
+    public void agregarEventos(){
+        
+    }
+    
+    
+    private class Manejador implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            
+            if(ae.getSource()==""){
+            
+            }else if(ae.getSource()=="."){
+            }
+            
+        }
+    
+    
+    }
     
     
 }

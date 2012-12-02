@@ -25,11 +25,7 @@
 *.maf
 *.mtc
 *.mtc0
-/ProyectoOptimizacion/nbproject/private/
 /ProyectoOptimizacion/build/
 ProyectoOptimizacion/build
 ProyectoOptimizacion/bin
 ProyectoOptimizacion/*.class
-ProyectoOptimizacion/build.xml
-ProyectoOptimizacion/manifest.mf
-ProyectoOptimizacion/nbproject
