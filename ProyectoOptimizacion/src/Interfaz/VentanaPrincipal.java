@@ -5,7 +5,6 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**
  *
@@ -26,9 +25,8 @@ public class VentanaPrincipal extends JFrame {
     
     public void init(){
     	CanvasGrid c = new CanvasGrid();
-    	JPanel panelCanvas = new JPanel();
-    	panelCanvas.add(c);
-    	add(panelCanvas);
+    	
+    	add(c);
     }
     
     public void propiedadesJFrame(){
