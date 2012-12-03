@@ -1,10 +1,14 @@
 
 package Interfaz;
 
+import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -24,14 +28,15 @@ public class VentanaPrincipal extends JFrame {
     }
     
     public void init(){
+    	Container con = this.getContentPane();
     	CanvasGrid c = new CanvasGrid();
-    	
-    	add(c);
+    	con.add(c);
     }
     
     public void propiedadesJFrame(){
         this.setTitle("Proyecto");        
-        this.setSize(800, 600);
+        this.setSize(1000, 600);
+        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
     }
     

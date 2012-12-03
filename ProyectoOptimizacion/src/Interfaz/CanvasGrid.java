@@ -80,8 +80,15 @@ public class CanvasGrid extends JComponent{
 		this.initY=10;
 		this.sizeCircle=10;
 		this.colorCity=Color.GREEN;
-		this.colorDump=Color.RED;
-		
+		this.colorDump=Color.RED;		
+	}
+	
+	/**
+	 * Método que limpia el canvas
+	 * @param g
+	 */
+	public void clearGrid(Graphics g){
+		g.clearRect(0, 0, this.numColumns+this.sizeCircle*2, this.numRows+this.sizeCircle*2);		
 	}
 	
 	@Override
@@ -91,12 +98,39 @@ public class CanvasGrid extends JComponent{
 		paintCity(g, 0, 3);
 		paintCity(g, 1, 3);
 		paintCity(g, 2, 3);
-		paintCity(g, 5, 3);
-		paintDump(g, 2, 4);
+		paintCity(g, 8, 9);
+		paintDump(g, 9, 9);
 		paintDump(g, 3, 2.1234);
-		paintDump(g, 3, 2.5);		
+		paintDump(g, 3, 2.5);
+		
+		
+		//clearGrid(g);
+		
+		//paintRegion(g);
 	}
 	
+	
+	public void paintRegion(Graphics g){
+		
+		int size = 10;//cantidad de ciudades a mostrar		
+		paintGrid(g);
+		int posx = 1;
+		int posy = 2;//
+		for(int i=0;i<size;i++){
+					
+			paintCity(g, posx, posy);
+		}
+		if(true){// si se quiere mostrar el basurero
+			paintDump(g, posx+1, posy+1);			
+		}
+		
+		
+	}
+	
+	/**
+	 * Pinta la cuadricula que representa la grilla de la región
+	 * @param g donde se va a pintar la grilla
+	 */
 	public void paintGrid(Graphics g){
 		Color tmp = g.getColor();
 		
