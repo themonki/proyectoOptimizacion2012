@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 /**
  *
  * @author Edgar Andrés Moncada
+ * @
  */
 public class VentanaPrincipal extends JFrame {
     
@@ -23,15 +24,16 @@ public class VentanaPrincipal extends JFrame {
     }
     
     public void init(){
-    
+    	CanvasGrid c = new CanvasGrid();
+    	
+    	add(c);
+    	//c.repaint();
     }
     
     public void propiedadesJFrame(){
         this.setTitle("Proyecto");        
         this.setSize(400, 600);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
-        
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
     }
     
     public void agregarEventos(){
