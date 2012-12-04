@@ -69,23 +69,53 @@ public class CanvasGrid extends JComponent{
 	
 	private int maxPointY;
 	
+	private boolean activarPrueba=false;
+	private boolean activarBasurero = false;
+	
 	/**
 	 * 
 	 */
 	public CanvasGrid() {
 		// TODO Auto-generated constructor stub
-		this.sizeGrid=20-1;// se resta 1 siempre
-		this.sizeRects=50;
-		this.numColumns=this.numRows=sizeRects*this.sizeGrid;
-		this.initX=30;
-		this.initY=30;
+		this.sizeGrid=0;// se resta 1 siempre
+		this.sizeRects=0;		
+		this.initX=0;
+		this.initY=0;
 		this.maxPointY=0;
-		this.sizeCircle=12;
+		this.sizeCircle=0;
+		
+		this.numColumns=this.numRows=sizeRects*this.sizeGrid;
 		this.colorCity=Color.GREEN;
 		this.colorDump=Color.RED;
 		
-		this.setPreferredSize(new Dimension((this.numColumns+this.sizeCircle*2 + this.initX*2),(this.numRows+this.sizeCircle*2)+this.initY*2));
+		Dimension d =new Dimension((this.numColumns+this.sizeCircle*2 + this.initX*2),(this.numRows+this.sizeCircle*2)+this.initY*2);
+		this.setPreferredSize(d);
+		
 	}
+	
+	public CanvasGrid(int sizeGrid,int sizeRects,int initX, int initY,int sizeCircle) {//falta agregar el tipo de dato inicial sin el basurero
+		
+		//valores para pintar la forma el Grid
+		this.sizeRects=sizeRects;		
+		this.initX=initX;
+		this.initY=initY;
+		this.sizeCircle=sizeCircle;
+		
+		//valores para el grid y pintar los elementos
+		this.sizeGrid=sizeGrid;// se resta 1 siempre
+		this.maxPointY=0; //
+		
+		
+		this.numColumns=this.numRows=sizeRects*this.sizeGrid;
+		this.colorCity=Color.GREEN;
+		this.colorDump=Color.RED;
+		
+		Dimension d =new Dimension((this.numColumns+this.sizeCircle*2 + this.initX*2),(this.numRows+this.sizeCircle*2)+this.initY*2);
+		this.setPreferredSize(d);
+		
+	}
+	
+	
 	
 	/**
 	 * Método que limpia el canvas
@@ -97,38 +127,45 @@ public class CanvasGrid extends JComponent{
 	
 	@Override
 	public void paint(Graphics g){
-		 
-		paintGrid(g);
-		paintCity(g, 0, 3);
-		paintCity(g, 1, 3);
-		paintCity(g, 2, 3);
-		paintCity(g, 8, 9);
-		paintDump(g, 9, 9);
-		paintDump(g, 3, 2.1234);
-		paintDump(g, 3, 2.5);
+		clearGrid(g);
+		//SOLO PARA PRUEBAS
+		if(this.activarPrueba){
+			paintGrid(g);
+			paintCity(g, 0, 3);
+			paintCity(g, 1, 3);
+			paintCity(g, 2, 3);
+			paintCity(g, 8, 9);
+			paintDump(g, 9, 9);
+			paintDump(g, 3, 2.1234);
+			paintDump(g, 3, 2.5);			
+		}
 		
-		
-		//clearGrid(g);
-		
-		//paintRegion(g);
+		//LLAMAR AL METODO QUE VA A PINTAR LA REGION DADA LA ESTRUCTURA DE DATOS
+		if(this.sizeGrid!=0)paintRegion(g,this.sizeGrid);
 	}
 	
 	
-	public void paintRegion(Graphics g){
-		
-		int size = 10;//cantidad de ciudades a mostrar		
+	
+	/**
+	 * Función que pintara una región dada una estructura de datos, con las ciudades y (o sin) el basurero
+	 * @param g
+	 */
+	public void paintRegion(Graphics g, int sizeGrid){//AGREGAR LA ESTRUCTURA DE DATOS 
+		//this.activarPrueba=false; // DESCOMENTAR CUANDO SE TENGA LA ESTRUCTURA DE DATOS
+		clearGrid(g);
+		int size = sizeGrid;//cantidad de ciudades a mostrar		
 		paintGrid(g);
 		int posx = 1;
 		int posy = 2;//
-		for(int i=0;i<size;i++){
-					
+		for(int i=0;i<size;i++){					
 			paintCity(g, posx, posy);
 		}
-		if(true){// si se quiere mostrar el basurero
-			paintDump(g, posx+1, posy+1);			
+		if(this.activarBasurero){// si se quiere mostrar el basurero
+			paintDump(g, posx+1, posy+1);
 		}
 		
-		
+		Dimension d =new Dimension((this.numColumns+this.sizeCircle*2 + this.initX*2),(this.numRows+this.sizeCircle*2)+this.initY*2);
+		this.setPreferredSize(d);
 	}
 	
 	/**
@@ -218,5 +255,49 @@ public class CanvasGrid extends JComponent{
 		
 	}
 	
+	
+	//para prueba del canvas
+	public void pruebaGrid(){
+		this.activarPrueba=true;
+		this.sizeGrid=40-1;// se resta 1 siempre
+		this.sizeRects=50;
+		this.numColumns=this.numRows=sizeRects*this.sizeGrid;
+		this.initX=30;
+		this.initY=30;
+		this.maxPointY=0;
+		this.sizeCircle=12;
+		this.colorCity=Color.GREEN;
+		this.colorDump=Color.RED;
+		Dimension d =new Dimension((this.numColumns+this.sizeCircle*2 + this.initX*2),(this.numRows+this.sizeCircle*2)+this.initY*2);
+		this.setPreferredSize(d);
+		repaint();
+		
+	}
+	public void desactivarPruebaGrid(){
+		this.activarPrueba=false;
+		this.sizeGrid=0;// se resta 1 siempre
+		this.sizeRects=0;		
+		this.initX=0;
+		this.initY=0;
+		this.maxPointY=0;
+		this.sizeCircle=0;
+		
+		this.numColumns=this.numRows=sizeRects*this.sizeGrid;
+		this.setPreferredSize(new Dimension(0,0));
+	}
+
+	/**
+	 * @return the activarBasurero
+	 */
+	public boolean isActivarBasurero() {
+		return activarBasurero;
+	}
+
+	/**
+	 * @param activarBasurero the activarBasurero to set
+	 */
+	public void setActivarBasurero(boolean activarBasurero) {
+		this.activarBasurero = activarBasurero;
+	}
 
 }

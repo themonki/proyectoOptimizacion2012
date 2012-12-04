@@ -59,7 +59,7 @@ public class Lector {
     
     //comentar si no se quiere imprimir
     private void print(Object arg){
-        //System.out.print(arg);
+        System.out.print(arg);
     }
     private void println(Object arg){
         print(arg + "\n");
