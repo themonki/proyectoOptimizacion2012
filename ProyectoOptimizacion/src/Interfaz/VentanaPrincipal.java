@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,10 +35,11 @@ public class VentanaPrincipal extends JFrame {
     
     Manejador manejador;
     CanvasGrid canvasGrid;
-    JLabel labelBasurero, labelDistancia;
+    JLabel labelDump, labelDistancia;
     JMenuItem menuFile_Open;
     String dirArchivo;
     JScrollPane jsp;
+    JButton btEjecutar;
     
     public VentanaPrincipal() throws HeadlessException {
         
@@ -56,33 +58,47 @@ public class VentanaPrincipal extends JFrame {
     	Container container = this.getContentPane();
     	container.setLayout(new BorderLayout());
     	JPanel panelDatos = new JPanel(new GridBagLayout());
-    	jsp = new JScrollPane();
-    	JLabel l = new JLabel("Coordenadas del Basurero:");
-    	JLabel l2 = new JLabel("Distancia a la ciudad mas cercana:");
-    	this.labelBasurero = new JLabel("( 0 , 0 )");
-    	this.labelDistancia = new JLabel(" 0 ");
+    	
+    	
+    	
+    	JLabel etiquetaBasurero = new JLabel("Coordenadas del Basurero:");
+    	JLabel etiquetaCiudadCercana = new JLabel("Distancia a la ciudad mas cercana:");
+    	
+    	
     	GridBagConstraints gbc = new GridBagConstraints();
     	gbc.gridwidth=30;
-    	gbc.ipady=20;
     	gbc.gridx=0;
     	gbc.gridy=0;
     	
     	//Instanciando Atributos
-    	canvasGrid = new CanvasGrid();
+    	this.canvasGrid = new CanvasGrid();
+    	this.jsp = new JScrollPane();
+    	this.labelDump = new JLabel("( 0 , 0 )");
+    	this.labelDistancia = new JLabel(" 0 ");
+    	this.btEjecutar = new JButton("Ejecutar");
     	
     	
     	//Modificadores
-    	jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    	jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    	this.jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    	this.jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     	
     	
     	//adicionando elementos
-    	panelDatos.add(l,gbc);
-    	gbc.gridy=1;
-    	panelDatos.add(this.labelBasurero,gbc);
-    	gbc.gridy=2;
-    	panelDatos.add(l2, gbc);
-    	gbc.gridy=3;
+    	int movery=0;
+    	panelDatos.add(this.btEjecutar,gbc);
+    	gbc.ipady=20;
+    	
+    	movery++;
+    	gbc.gridy=movery;
+    	panelDatos.add(etiquetaBasurero,gbc);    	
+    	movery++;
+    	gbc.gridy=movery;
+    	panelDatos.add(this.labelDump,gbc);
+    	movery++;
+    	gbc.gridy=movery;
+    	panelDatos.add(etiquetaCiudadCercana, gbc);
+    	movery++;
+    	gbc.gridy=movery;
     	panelDatos.add(this.labelDistancia,gbc);
 
     	
@@ -123,8 +139,9 @@ public class VentanaPrincipal extends JFrame {
     }
     
     public void agregarEventos(){
-        manejador = new Manejador();
-        menuFile_Open.addActionListener(manejador);
+        this.manejador = new Manejador();
+        this.menuFile_Open.addActionListener(this.manejador);
+        this.btEjecutar.addActionListener(this.manejador);
     }
     
     /*
@@ -151,8 +168,19 @@ public class VentanaPrincipal extends JFrame {
 					canvasGrid.pruebaGrid();// luego quitar esto
 					jsp.setViewportView(canvasGrid);
 				}            
-            }else if(e.getSource()=="EJECUTAR"){
-            	canvasGrid.setActivarBasurero(true);
+            }else if(e.getSource()==btEjecutar){
+            	/*
+            	canvasGrid.setActivarDump(true);
+            	 
+            	canvasGrid.setDump();
+            	
+            	
+            	
+            	*/
+            	double coordenadaDumpX = 1, coordenadaDumpY=2, distancia=3;
+            	labelDump.setText("( " +coordenadaDumpX + " , "+coordenadaDumpY +" )");
+            	labelDistancia.setText(""+distancia);
+            
             }
             
         }

@@ -67,10 +67,18 @@ public class CanvasGrid extends JComponent{
 	 */
 	private Color colorDump;
 	
+	/**
+	 * Usado para determinar cual es la coordenada en Y mas hacia abajo en el grid y poder invertir el orden
+	 */
 	private int maxPointY;
 	
 	private boolean activarPrueba=false;
-	private boolean activarBasurero = false;
+	
+	
+	/**
+	 *	Permite gráficar el basurero en el método paintRegion si esta true, por defecto false 
+	 */
+	private boolean activarDump = false;
 	
 	/**
 	 * 
@@ -160,7 +168,7 @@ public class CanvasGrid extends JComponent{
 		for(int i=0;i<size;i++){					
 			paintCity(g, posx, posy);
 		}
-		if(this.activarBasurero){// si se quiere mostrar el basurero
+		if(this.activarDump){// si se quiere mostrar el basurero
 			paintDump(g, posx+1, posy+1);
 		}
 		
@@ -289,15 +297,15 @@ public class CanvasGrid extends JComponent{
 	/**
 	 * @return the activarBasurero
 	 */
-	public boolean isActivarBasurero() {
-		return activarBasurero;
+	public boolean isActivarDump() {
+		return activarDump;
 	}
 
 	/**
 	 * @param activarBasurero the activarBasurero to set
 	 */
-	public void setActivarBasurero(boolean activarBasurero) {
-		this.activarBasurero = activarBasurero;
+	public void setActivarDump(boolean activarBasurero) {
+		this.activarDump = activarBasurero;
 	}
 
 }
