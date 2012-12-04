@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 
 /**
  *
@@ -30,13 +31,19 @@ public class VentanaPrincipal extends JFrame {
     public void init(){
     	Container con = this.getContentPane();
     	CanvasGrid c = new CanvasGrid();
-    	con.add(c);
+    	JScrollPane jsp = new JScrollPane();
+    	jsp.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    	jsp.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    	con.add(jsp);
+    	jsp.setViewportView(c);
+    	this.pack();
+    	
     }
     
     public void propiedadesJFrame(){
         this.setTitle("Proyecto");        
         this.setSize(1000, 600);
-        this.setResizable(false);
+        //this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
     }
     

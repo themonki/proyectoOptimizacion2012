@@ -4,6 +4,7 @@
 package Interfaz;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.lang.Double;
 import java.math.BigDecimal;
@@ -66,21 +67,24 @@ public class CanvasGrid extends JComponent{
 	 */
 	private Color colorDump;
 	
-	
+	private int maxPointY;
 	
 	/**
 	 * 
 	 */
 	public CanvasGrid() {
 		// TODO Auto-generated constructor stub
-		this.sizeGrid=10-1;// se resta 1 siempre
+		this.sizeGrid=20-1;// se resta 1 siempre
 		this.sizeRects=50;
 		this.numColumns=this.numRows=sizeRects*this.sizeGrid;
-		this.initX=10;
-		this.initY=10;
-		this.sizeCircle=10;
+		this.initX=30;
+		this.initY=30;
+		this.maxPointY=0;
+		this.sizeCircle=12;
 		this.colorCity=Color.GREEN;
-		this.colorDump=Color.RED;		
+		this.colorDump=Color.RED;
+		
+		this.setPreferredSize(new Dimension((this.numColumns+this.sizeCircle*2 + this.initX*2),(this.numRows+this.sizeCircle*2)+this.initY*2));
 	}
 	
 	/**
@@ -133,12 +137,25 @@ public class CanvasGrid extends JComponent{
 	 */
 	public void paintGrid(Graphics g){
 		Color tmp = g.getColor();
+		//valores para indicar los números de la grid
+		int finX = 0, finY = 0, calibrarPosXHorizontal = 25, calibrarPosYHorizontal=5, calibrarPosXVertical = 5, calibrarPosYVertical=10  ;
 		
-		for(int i = this.initX; i < this.numColumns; i+=this.sizeRects)
-			for(int j = this.initY; j < this.numRows; j+=this.sizeRects){
-				g.drawRect(i, j, this.sizeRects, this.sizeRects);
+		for(int i = 0; i < this.numColumns; i+=this.sizeRects)
+			for(int j = 0; j < this.numRows; j+=this.sizeRects){
+				
+				//dibujar coordenadas izquierda primero y luego superior
+				g.drawString(""+ (this.sizeGrid -(int)(i/this.sizeRects)), this.initX-calibrarPosXHorizontal , i+this.initY+calibrarPosYHorizontal);
+				g.drawString(""+ (int)(j/this.sizeRects), j+this.initY-calibrarPosXVertical, this.initY-calibrarPosYVertical);
+				//*******************************************
+				g.drawRect(i+this.initX, j+this.initY, this.sizeRects, this.sizeRects);
+				this.maxPointY=j+this.initY+this.sizeRects;
+				finX=i+this.sizeRects;
+				finY=j+this.sizeRects;
 			}
-		
+		//dibujar coordenadas finales, izquierda primero y luego superior
+		g.drawString(""+ (this.sizeGrid -(int)(finX/this.sizeRects)), this.initX-calibrarPosXHorizontal , finX+this.initY+calibrarPosYHorizontal);
+		g.drawString(""+ (int)(finY/this.sizeRects), finY+this.initY-calibrarPosXVertical, this.initY-calibrarPosYVertical);
+		//**************************
 		g.setColor(tmp);
 	}
 	
@@ -152,9 +169,9 @@ public class CanvasGrid extends JComponent{
 	public void paintElementPoint(Graphics g, double posX, double posY){
 		int posXDec = (int) ((this.sizeRects)*getDecimal(posX));
 		int posYDec = (int) ((this.sizeRects)*getDecimal(posY));
-		int x = posXDec+this.initX+(int)posX*this.sizeRects-(this.sizeCircle/2);
-		int y = posYDec+this.initY+(int)posY*this.sizeRects-(this.sizeCircle/2);
-		int correctionY = this.initY+this.numRows - y;	
+		int x = posXDec+this.initX+(int)posX*this.sizeRects-(int)(this.sizeCircle/2);
+		//int y = posYDec+this.initY+(int)posY*this.sizeRects-(int)(this.sizeCircle/2);			
+		int correctionY = this.maxPointY - posYDec - (int)posY *this.sizeRects - (int)(this.sizeCircle/2);		
 		g.fillOval(x,correctionY, this.sizeCircle, this.sizeCircle);
 	}
 	
