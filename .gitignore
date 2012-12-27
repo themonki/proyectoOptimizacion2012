@@ -29,3 +29,6 @@
 ProyectoOptimizacion/build
 ProyectoOptimizacion/bin
 ProyectoOptimizacion/*.class
+ProyectoOptimizacion/nbproject
+ProyectoOptimizacion/build.xml
+ProyectoOptimizacion/manifest.mf
