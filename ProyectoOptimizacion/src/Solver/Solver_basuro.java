@@ -4,10 +4,6 @@
  */
 package Solver;
 
-/**
- *
- * @author hvar90
- */
 import lpsolve.*;
 
 /**
@@ -73,7 +69,7 @@ public class Solver_basuro {
             colno[ i + posDump] = 1 + i + posDump;
             row[ i + posDump] = 1;
 
-            lp.addConstraintex(Ncol, row, colno, LpSolve.LE, sizeGrid + 1);
+            lp.addConstraintex(Ncol, row, colno, LpSolve.LE, sizeGrid  + 1);
 
         }
 
@@ -200,7 +196,7 @@ public class Solver_basuro {
 
         colno[j] = j + 1;
         row[j] = 1;
-        // lp.setUnbounded(j + 1);
+        lp.setUnbounded(j + 1);
 
 
 
@@ -218,7 +214,7 @@ public class Solver_basuro {
 
 
         /* se crea dos restricciones del tipo (Zxi + MB >= Zx ) y (Zxi + MB <= M - Zx ) */
-        /* se crea dos restricciones del tipo (Zxi + MB - Zx>= 0 ) y (Zxi + MB - Zx <= M  ) */
+        /* normalizado (Zxi + MB - Zx>= 0 ) y (Zxi + MB - Zx <= M  ) */
         /* la variable tambien puede ser Zyi */
         int[] colno = new int[Ncol];
         double[] row = new double[Ncol];
@@ -270,11 +266,11 @@ public class Solver_basuro {
         int[] colno = new int[Ncol];
         double[] row = new double[Ncol];
 
-        colno[posDelta] = posDelta + 1;
-        row[posDelta] = 1;
+        colno[0] = 1;
+        row[0] = 1;
 
-        colno[posDelta + 1] = posDelta + 2;
-        row[posDelta + 1] = 1;
+        colno[1] =  2;
+        row[1] = 1;
 
 
         lp.setObjFnex(Ncol, row, colno);
@@ -288,6 +284,8 @@ public class Solver_basuro {
         //variables de la posicion de la ciudad cercana
         lp.setColName(1 + posNearbyCity, "Xc");
         lp.setColName(2 + posNearbyCity, "Yc");
+        lp.setInt(1 + posNearbyCity, true);
+        lp.setInt(2 + posNearbyCity, true);
 
         /* crear dx y dy de la forma (dx = Xc - Xb) */
         /* normalizado (dx - Xc + Xb = 0) */
