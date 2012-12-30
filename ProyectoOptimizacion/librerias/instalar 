@@ -1,0 +1,12 @@
+Primero deben poner en su carpeta /usr/local/lib la carpeta lp_solve_5.5.2.0   
+
+Luego agregar el jar al proyecto 
+
+luego encima del proyecto click derecho propiedades RUn en el campo MV  poner: 
+
+-Djava.library.path="/usr/local/lib/lp_solve_5.5.2.0_dev_ux32"
+
+
+luego deben copiar el archivo  liblpsolve55.so (esta dentro del lp_solve_5.5.2.0_dev_ux32, ojo copiar no mover  ) en la carpeta /usr/lib    luego se ubican en esta carpeta y escriben ldconfig como sudo 
+
+si tienen problemas agreguen al path: la ruta del lp_solve_5.5.2.0_dev_ux32
