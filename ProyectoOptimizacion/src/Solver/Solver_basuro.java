@@ -8,7 +8,7 @@ import lpsolve.*;
 
 /**
  *
- * @author hvar90
+ * @author hvar90 esta es la version ultima que tengo 
  */
 public class Solver_basuro {
 
@@ -30,8 +30,9 @@ public class Solver_basuro {
     int posBinaryCity = 10 + (numCities * 6);
     // posicion variables auxiliares que remplazaran la diferencia entre cada ciudad  y el basurero
     int posVarDeltaAux = 10 + (numCities * 7);
+    //posicion variables binarias que aseguraran que se escoja una  de las ciudades dadas inicialmente
     int posVarBinary = 4 + (numCities * 2);
-    //  int auxJdelta = posVarDeltaAux;
+  
     LpSolve lp;
     int Ncol, j, ret, M, Mobj = 0;
 
@@ -103,8 +104,8 @@ public class Solver_basuro {
         double[] row = new double[Ncol];
         int[] colno2 = new int[Ncol];
         double[] row2 = new double[Ncol];
-
-
+        
+        
         int aux = 0;
 
         colno[posNearbyCity] = posNearbyCity + 1;
@@ -112,7 +113,7 @@ public class Solver_basuro {
 
         colno2[posNearbyCity + 1] = posNearbyCity + 2;
         row2[posNearbyCity + 1] = 1;
-
+        
         //aqui se crea 2 restricciones del tipo
         //Xc= X1Bc1 + X2Bc2 + X3Bc3 .......XiBci ------> Xc - X1Bc1 - X2Bc2 - X3Bc3 .......-XiBci= 0
         //Yc= Y1Bc1 + Y2Bc2 + Y3Bc3 .......YiBci ------> Yc - Y1Bc1 - Y2Bc2 - Y3Bc3 .......-YiBci= 0
@@ -122,19 +123,22 @@ public class Solver_basuro {
 
             colno[posBinaryCity + aux] = posBinaryCity + aux + 1;
             row[posBinaryCity + aux] = -(posCities[j]);
-
-            colno2[posBinaryCity + aux] = posBinaryCity + aux + 1;
-            row2[posBinaryCity + aux] = -(posCities[j + 1]);
-
+            
+            colno2[posBinaryCity + aux] =  posBinaryCity + aux + 1;
+            row2[posBinaryCity + aux] = -(posCities[j+1]);
+            
             aux++;
 
         }
-
-        lp.addConstraintex(Ncol, row2, colno2, LpSolve.EQ, 0);
-        lp.addConstraintex(Ncol, row, colno, LpSolve.EQ, 0);
-
-
-        colno = new int[Ncol];
+        
+         lp.addConstraintex(Ncol, row2, colno2, LpSolve.EQ, 0);
+         lp.addConstraintex(Ncol, row, colno, LpSolve.EQ, 0);
+        
+        
+        
+        
+        
+         colno = new int[Ncol];
         row = new double[Ncol];
         colno2 = new int[Ncol];
         row2 = new double[Ncol];
@@ -153,31 +157,52 @@ public class Solver_basuro {
             colno[1] = 2;
             row[1] = -1;
 
+
+
             lp.setColName(j + 1, "Zx" + idCity);
             lp.setColName(j + 2, "Zy" + idCity);
+      
+
+
             /* se crea cada restriccion del tipo (Zxia  + Zxib + Zyia + Zyib  >= Zx + Zy ) */
+
             /* normalizado (Zxia  + Zxib + Zyia + Zyib   - Zx - Zy >= 0 ) */
+
             replace_val_abs(0);
+
+            //restrict_pos_cYc(idCity, 0, aux);
+            //  eliminate_neg_var("x", idCity, 0);
             colno[posVarDeltaAux] = posVarDeltaAux + 1;
             row[posVarDeltaAux] = 1;
             colno[posVarDeltaAux + 1] = posVarDeltaAux + 2;
             row[posVarDeltaAux + 1] = 1;
-            replace_val_abs_aux(idCity, "x");// variable X
+            // eliminate_neg_var("x", idCity, "a");
+            replace_val_abs2(idCity, "x");// variable X
             j++;
+
             replace_val_abs(1);
+
+            // restrict_pos_cYc(idCity, 1, aux);
+            //eliminate_neg_var("y", idCity, 1);
             colno[posVarDeltaAux] = posVarDeltaAux + 1;
             row[posVarDeltaAux] = 1;
             colno[posVarDeltaAux + 1] = posVarDeltaAux + 2;
             row[posVarDeltaAux + 1] = 1;
-            replace_val_abs_aux(idCity, "y");// variable Y
+            // eliminate_neg_var("y", idCity, "b");
+            replace_val_abs2(idCity, "y");// variable Y
             j++;
+
+
             lp.addConstraintex(Ncol, row, colno, LpSolve.GE, 0);
+
             colno = new int[Ncol];
             row = new double[Ncol];
+
             lp.setColName(posBinaryCity + idCity, "Bc" + idCity);
             lp.setBinary(posBinaryCity + idCity, true);
             aux++;
             aux++;
+
             colno2[posBinaryCity + idCity - 1] = posBinaryCity + idCity - 1;
             row2[posBinaryCity + idCity - 1] = 1;
 
@@ -191,11 +216,44 @@ public class Solver_basuro {
         //decimos que la suma de las 4 variables binarias Bc1 + Bc2 + Bc3 + Bc4 = 1 
         lp.addConstraintex(Ncol, row2, colno2, LpSolve.EQ, 1);
 
+       
+
+
+
+
 
 
     }
 
-    void replace_val_abs_aux(int idCity, String typeVar) throws LpSolveException {
+    void restrict_pos_cYc(int idBinaryCity, int type, int aux) throws LpSolveException {
+        //aca se restringe los valores que puede tomar las variables Xc y Yc osea la posicion de la ciudad cercana
+        /* se crea cada restriccion del tipo (Xc >= Bci*Xi - 1)  y  (Xc <= Bci*Xi + 1)*/
+        /* normalizado  (Xc - Bci*Xi  + 1 >=   ) y (Xc - Bci*Xi  - 1 <=   )*/
+        /* igual para la variable Y  (Yc - Bci*Yi  =  0 ) */
+
+        //  lp.setInt(posDump + 1, true);
+        // lp.setInt(posDump + 2, true);
+
+
+        int[] colno = new int[Ncol];
+        double[] row = new double[Ncol];
+        idBinaryCity--;
+
+        colno[posBinaryCity + idBinaryCity] = posBinaryCity + idBinaryCity + 1;
+        row[posBinaryCity + idBinaryCity] = -(posCities[aux + type]);
+
+        colno[posNearbyCity + type] = posNearbyCity + 1 + type;
+        row[posNearbyCity + type] = 1;
+
+        lp.addConstraintex(Ncol, row, colno, LpSolve.GE, 0);
+
+
+
+
+
+    }
+
+    void replace_val_abs2(int idCity, String typeVar) throws LpSolveException {
 
         /* se crea cada restriccion del tipo (Zxi = Zxia  - Zxib ) */
         /* normalizado  (Zxi - Zxia +  Zxib  =  0 ) */
@@ -212,8 +270,10 @@ public class Solver_basuro {
         int[] colno = new int[Ncol];
         double[] row = new double[Ncol];
 
+
         colno[j] = j + 1;
         row[j] = 1;
+
 
         colno2[ posVarDeltaAux] = posVarDeltaAux + 1;
         row2[ posVarDeltaAux] = -1;
@@ -249,8 +309,13 @@ public class Solver_basuro {
         lp.setBinary(posVarBinary, true);
         lp.setColName(posVarDeltaAux, "Z" + typeVar + idCity + "b");
         lp.addConstraintex(Ncol, row2, colno2, LpSolve.GE, 0);
-        lp.addConstraintex(Ncol, row, colno, LpSolve.EQ, 0);
+        lp.addConstraintex(Ncol, row, colno, LpSolve.EQ, 0);        
         lp.addConstraintex(Ncol, row3, colno3, LpSolve.EQ, 1);
+
+
+
+
+
     }
 
     void replace_val_abs(int type) throws LpSolveException {
@@ -259,32 +324,119 @@ public class Solver_basuro {
         /* se crea cada restriccion del tipo (Zxi = Xi  - Xb ) */
         /* normalizado  (Zxi + Xb  =  Xi ) */
         /* si es una varialble Zyi entonces seria  (Zyi + Yb  = Yi ) */
+
         /* normalizado  (Zxi + Xb  =  Xi ) */
+
         int[] colno = new int[Ncol];
         double[] row = new double[Ncol];
+
         colno[j] = j + 1;
         row[j] = 1;
         lp.setUnbounded(j + 1);
 
+
+
+
         colno[posDump + type] = posDump + 1 + type;
         row[posDump + type] = 1;
+
+
+
+        // System.out.println(posCities[j - 2]);
+
         lp.addConstraintex(Ncol, row, colno, LpSolve.EQ, posCities[j - 2]);
+
+    }
+
+    void eliminate_neg_var(String var, int idBinary, String type) throws LpSolveException {
+
+
+        /* se crea dos restricciones del tipo (  MBxia - Zxia>= 0 ) y (MBxib - Zxib >= 0 ) */
+
+        /* lo mismo para la variable Y  */
+
+
+        int[] colno = new int[Ncol];
+        double[] row = new double[Ncol];
+
+
+        colno[ posVarDeltaAux] = posVarDeltaAux + 1;
+        row[ posVarDeltaAux] = 1;
+
+        colno[ posVarBinary] = posVarBinary;
+        row[ posVarBinary++] = M;
+
+        lp.setColName(posVarBinary, "B" + var + idBinary + type);
+
+        lp.setBinary(posVarBinary, true);
+
+        lp.addConstraintex(Ncol, row, colno, LpSolve.GE, 0);
+
+
+    }
+
+    void eliminate_neg_var2(String type, int idBinary, int typeInt) throws LpSolveException {
+
+
+        /* se crea dos restricciones del tipo (Zxi + MB >= Zx ) y (Zxi + MB <= M - Zx ) */
+        /* normalizado (Zxi + MB - Zx>= 0 ) y (Zxi + MB - Zx <= M  ) */
+        /* la variable tambien puede ser Zyi */
+        int[] colno = new int[Ncol];
+        double[] row = new double[Ncol];
+
+
+        colno[j] = j + 1;
+        row[j] = 1;
+
+        colno[j + posDump] = 1 + j + posDump;
+        row[ j + posDump] = M;
+
+        colno[typeInt] = 1 + typeInt;
+        row[typeInt] = -1;
+
+        lp.setBinary(1 + j + posDump, true);
+        lp.setColName(1 + j + posDump, "B" + type + (idBinary));
+
+
+        lp.addConstraintex(Ncol, row, colno, LpSolve.GE, 0);
+
+        colno = new int[Ncol];
+        row = new double[Ncol];
+
+
+        colno[j] = j + 1;
+        row[j] = 1;
+
+        colno[j + posDump] = 1 + j + posDump;
+        row[ j + posDump] = M;
+
+        colno[typeInt] = 1 + typeInt;
+        row[typeInt] = -1;
+
+        lp.addConstraintex(Ncol, row, colno, LpSolve.LE, M);
+
     }
 
     void Create_func_obj() throws LpSolveException {
 
         replace_val_abs_obj();
+
         lp.setAddRowmode(false); //se debe hacer esto cuando se hallan agregado todas las restricciones
 
         /* funcion objetivo de la forma (Zx + Zy) */
 
         int[] colno = new int[Ncol];
         double[] row = new double[Ncol];
+
         colno[0] = 1;
         row[0] = 1;
+
         colno[1] = 2;
         row[1] = 1;
+
+
         lp.setObjFnex(Ncol, row, colno);
+
         lp.setMaxim();
 
     }
@@ -296,13 +448,17 @@ public class Solver_basuro {
         lp.setColName(2 + posNearbyCity, "Yc");
         lp.setInt(1 + posNearbyCity, true);
         lp.setInt(2 + posNearbyCity, true);
+
         /* crear dx y dy de la forma (dx = Xc - Xb) */
         /* normalizado (dx - Xc + Xb = 0) */
         lp.setColName(1 + posDelta, "dx");
         lp.setColName(2 + posDelta, "dy");
+
         // se indica que los deltas pueden ser negativos
         lp.setUnbounded(1 + posDelta);
         lp.setUnbounded(2 + posDelta);
+
+
 
         for (int i = 0; i < 2; i++) {
 
@@ -325,7 +481,7 @@ public class Solver_basuro {
 
             //reemplazar dx y dy por Zx y Zy
          /* crear 4 restricciones de la forma:
-             * (dx + MB - Zx >= 0) 
+             * (dx + MB - Zx >= 0) NOTA; si quitamos las 2 primeras restricciones tambien arroja el mismo resultado
              * (dx + MB + Zx <= M)
              * (dx  <= Zx) ------> (dx - Zx <= 0)
              * (-dx  <= Zx)  ------> (-dx - Zx <= 0)
@@ -418,6 +574,9 @@ public class Solver_basuro {
     }
 
     public static void main(String[] args) {
+
+
+
         try {
 
             Solver_basuro obj = new Solver_basuro();
