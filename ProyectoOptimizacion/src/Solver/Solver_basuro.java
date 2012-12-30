@@ -93,9 +93,7 @@ public class Solver_basuro {
 
     }
 
-    void Create_restrictions() throws LpSolveException {
-
-
+    void Create_constraints() throws LpSolveException {
 
         lp.setColName(1, "Zx");
         lp.setColName(2, "Zy");
@@ -103,16 +101,11 @@ public class Solver_basuro {
         double[] row = new double[Ncol];
         int[] colno2 = new int[Ncol];
         double[] row2 = new double[Ncol];
-
-
         int aux = 0;
-
         colno[posNearbyCity] = posNearbyCity + 1;
         row[posNearbyCity] = 1;
-
         colno2[posNearbyCity + 1] = posNearbyCity + 2;
         row2[posNearbyCity + 1] = 1;
-
         //aqui se crea 2 restricciones del tipo
         //Xc= X1Bc1 + X2Bc2 + X3Bc3 .......XiBci ------> Xc - X1Bc1 - X2Bc2 - X3Bc3 .......-XiBci= 0
         //Yc= Y1Bc1 + Y2Bc2 + Y3Bc3 .......YiBci ------> Yc - Y1Bc1 - Y2Bc2 - Y3Bc3 .......-YiBci= 0
@@ -132,18 +125,11 @@ public class Solver_basuro {
 
         lp.addConstraintex(Ncol, row2, colno2, LpSolve.EQ, 0);
         lp.addConstraintex(Ncol, row, colno, LpSolve.EQ, 0);
-
-
-
-
-
         colno = new int[Ncol];
         row = new double[Ncol];
         colno2 = new int[Ncol];
         row2 = new double[Ncol];
         j = 2;
-
-
         aux = 0;
 
         for (int idCity = 1; idCity <= numCities; idCity++) {
@@ -155,18 +141,10 @@ public class Solver_basuro {
 
             colno[1] = 2;
             row[1] = -1;
-
-
-
             lp.setColName(j + 1, "Zx" + idCity);
             lp.setColName(j + 2, "Zy" + idCity);
-
-
-
             /* se crea cada restriccion del tipo (Zxia  + Zxib + Zyia + Zyib  >= Zx + Zy ) */
-
             /* normalizado (Zxia  + Zxib + Zyia + Zyib   - Zx - Zy >= 0 ) */
-
             replace_val_abs(0);
             colno[posVarDeltaAux] = posVarDeltaAux + 1;
             row[posVarDeltaAux] = 1;
@@ -282,53 +260,6 @@ public class Solver_basuro {
         colno[posDump + type] = posDump + 1 + type;
         row[posDump + type] = 1;
         lp.addConstraintex(Ncol, row, colno, LpSolve.EQ, posCities[j - 2]);
-
-    }
-
-    void eliminate_neg_var(String var, int idBinary, String type) throws LpSolveException {
-
-
-        /* se crea dos restricciones del tipo (  MBxia - Zxia>= 0 ) y (MBxib - Zxib >= 0 ) */
-        /* lo mismo para la variable Y  */
-        int[] colno = new int[Ncol];
-        double[] row = new double[Ncol];
-        colno[ posVarDeltaAux] = posVarDeltaAux + 1;
-        row[ posVarDeltaAux] = 1;
-        colno[ posVarBinary] = posVarBinary;
-        row[ posVarBinary++] = M;
-        lp.setColName(posVarBinary, "B" + var + idBinary + type);
-        lp.setBinary(posVarBinary, true);
-        lp.addConstraintex(Ncol, row, colno, LpSolve.GE, 0);
-
-
-    }
-
-    void eliminate_neg_var2(String type, int idBinary, int typeInt) throws LpSolveException {
-
-
-        /* se crea dos restricciones del tipo (Zxi + MB >= Zx ) y (Zxi + MB <= M - Zx ) */
-        /* normalizado (Zxi + MB - Zx>= 0 ) y (Zxi + MB - Zx <= M  ) */
-        /* la variable tambien puede ser Zyi */
-        int[] colno = new int[Ncol];
-        double[] row = new double[Ncol];
-        colno[j] = j + 1;
-        row[j] = 1;
-        colno[j + posDump] = 1 + j + posDump;
-        row[ j + posDump] = M;
-        colno[typeInt] = 1 + typeInt;
-        row[typeInt] = -1;
-        lp.setBinary(1 + j + posDump, true);
-        lp.setColName(1 + j + posDump, "B" + type + (idBinary));
-        lp.addConstraintex(Ncol, row, colno, LpSolve.GE, 0);
-        colno = new int[Ncol];
-        row = new double[Ncol];
-        colno[j] = j + 1;
-        row[j] = 1;
-        colno[j + posDump] = 1 + j + posDump;
-        row[ j + posDump] = M;
-        colno[typeInt] = 1 + typeInt;
-        row[typeInt] = -1;
-        lp.addConstraintex(Ncol, row, colno, LpSolve.LE, M);
 
     }
 
@@ -490,7 +421,7 @@ public class Solver_basuro {
         try {
 
             Solver_basuro obj = new Solver_basuro();
-            obj.Create_restrictions();
+            obj.Create_constraints();
             obj.Create_func_obj();
             obj.Create_sol();
             obj.Print_sol();
