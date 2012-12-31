@@ -1,0 +1,246 @@
+\documentclass[10pt]{article}
+\usepackage[right=2cm,left=2cm,top=2cm,bottom=3cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{graphicx}
+%\usepackage{multicol}
+
+%COLORES CODIGO
+\definecolor{gray97}{gray}{.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+\definecolor{claregreen}{RGB}{4,180,95}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+
+
+\lstset{ frame=Ltb,
+     framerule=0pt,
+     aboveskip=0.5cm,
+     framextopmargin=3pt,
+     framexbottommargin=3pt,
+     framexleftmargin=0.4cm,
+     framesep=0pt,
+     rulesep=.4pt,
+     backgroundcolor=\color{gray97},
+     rulesepcolor=\color{black},
+     %
+     stringstyle=\ttfamily,
+     showstringspaces = false,
+     basicstyle=\small\ttfamily,
+     commentstyle=\color{gray45},
+     keywordstyle=\bfseries,
+     %
+     numbers=left,
+     numbersep=15pt,
+     numberstyle=\tiny,
+     numberfirstline = false,
+     breaklines=true,
+   }
+
+% minimizar fragmentado de listados
+\lstnewenvironment{listing}[1][]
+   {\lstset{#1}\pagebreak[0]}{\pagebreak[0]}
+
+%LENGUAJE OZ
+\lstdefinelanguage{OZ}
+{
+  morestring=[b]',
+  morecomment=[s]{\%}{\%},
+  stringstyle=\color{claregreen},
+  keywordstyle=\color{blue}\bfseries,
+  morekeywords={proc, end, \$},% list your attributes here
+  emph={REQUIRED},
+  emphstyle=\color{red}
+}
+
+%MODO CONSOLA
+\lstdefinestyle{consola}
+   {basicstyle=\scriptsize\bf\ttfamily,
+    backgroundcolor=\color{gray75},
+   }
+
+
+\title{ \textbf{Modelo Matematico para la Acomodación de un Basurero en una Ciudad.}}
+
+\author{Maria Andrea Cruz Blandon 0831816 \and Edgar Andres Moncada  Taborda 0832294 \and Hebert Vargas Tello \and Luis Felipe Vargas Rojas 0836342  }
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Introducci\'on}
+En el siguiente documento se explicará el modelo contruido a través del paradigma de la programacion linea (lp), para resolver el problema de la acomodación de un basurero en una ciudad, el problema se basa en que la construcci\'on del basurero se debe realizar en el lugar  m\'as alejado posible de la ciudad mas cercana, esto debido a los malos olores que genera y a las molestias de cada ciudad por dicha construcción.\\
+
+Los principales problemas a los que nos enfentramos al tratar de modelar este problema con lp fuer\'on  definir los dominios las variables, establecer una forma para definir distancias entre ciudades y el basurero a trav\'es de un valor absoluto, definir a traves de restricciones la ciudad m\'as cercana entre otros detalles que se explicaran en el documento.\\
+
+Para la implementación del modelo usamos el programa lpsolve y una libreria de java que genera el archivo de entrada para el lpsolve teniendo en cuenta los valores de entrada.
+
+\section{Modelo Programaci\'on Lineal} 
+
+\subsection{Datos de Entrada}
+\begin{tabular}{l l }
+$T$ & Tamaño de la grilla (T x T)\\
+$N$ & Numero de ciudades.\\ 
+$X_i$ & Coordenada x de la ciudad i. \\
+$Y_i$ & Coordenada y de la ciudad i. \\
+
+\end{tabular}
+
+
+
+\subsection{Variables del Problema}
+\begin{tabular}{l l }
+$Xb$ & Coordenada x del basurero \\
+$Yb$ & Coordenada y del basurero \\
+$Xc$ & Coordenada x de la ciudad m\'as cercana al basurero \\
+$Yc$ & Coordenada y de la ciudad m\'as cercana al basurero \\
+
+
+$Zx_i$ & Diferencia entre la coordenada x del basurero ($Xb$) y la coordenada x de la ciudad i\\
+
+$Zy_i$ & Diferencia entre la coordenada y del basurero ($Yb$) y la coordenada y de la ciudad i\\
+
+
+$Zx_ia$ & Usada para el valor absoluto de la diferencia entre entre la ciudad i y el basurero representa la parte positiva de la variable $Zx_i$\\
+
+$Zx_ib$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero, representa la parte negativa de la variable $Zx_i$\\
+
+
+$Zy_ia$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte positiva de la variable $Zy_i$\\
+
+$Zy_ib$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte negativa de la variable $Zy_i$\\
+
+
+
+$dx$ & Diferencia entre $Xc$ - $Xb$ \emph{Usado para la funci\'on objetivo}\\
+
+$dy$ &  Diferencia entre $Yc$ - $Yb$ \emph{Usado para la funci\'on objetivo}\\
+
+
+$Zx$ & Valor absoluto de $dx$\\
+
+$Zy$ & Valor absoluto de $dy$ \\
+\end{tabular}
+
+
+
+
+
+\subsection{Variables Binarias del Problema}
+\textbf{Usadas para el Valor Absoluto de la Diferencia de cada Ciudad con el Basurero: }\\
+
+\begin{tabular}{l l }
+ $Bx_{ia}$ & Usada en las restricciones del valor absoluto para la ciudad i coordenada x \\
+$Bx_{ib}$ & Usada en las restricciones del valor absoluto para la ciudad i  coordenada x \\
+$By_{ia}$ & Usada en las restricciones del valor absoluto para la ciudad i coordenada y \\
+$By_{ib}$ & Usada en las restricciones del valor absoluto para la ciudad i coordenada y \\
+
+\end{tabular}\bigskip 
+
+\textbf{Usadas para  que  $Xc \in Zx_i$ y $Yc \in Zy_i$.}\\
+
+\begin{tabular}{l l }
+$Bc_i$ & Toma el valor de 1 si la ciudad i es la m\'as cercana \\
+\end{tabular}\bigskip
+
+
+\textbf{Usadas para  que  $Xc \in Zx_i$ y $Yc \in Zy_i$.}\\
+
+
+\begin{tabular}{l l }
+$Bx0$ &   Usada para el valor absoluto en la función objetivo coordenada x \\
+$By0$ &   Usada para el valor absoluto en la función objetivo coordenada y \\
+\end{tabular}\bigskip
+
+
+
+\subsection{Restricciones Obvias}
+\textbf{Dominios de las Variables}\\
+
+\begin{center}
+ $0$ $\leq $ $Xb$,$Yb$,$Xc$,$Yc$, $Zx$, $Zy$  $\leq $ $T$
+ 
+ $Zx_i$ , $Zy_i$ Son variables irrestrictas.
+\end{center}
+
+\subsection{Restricciones del Problema}
+\textbf{Garantizar que:  $Xc \in Zx_i$ y $Yc \in Zy_i$. }\\
+
+\begin{center}
+$Xc$ = $\sum_i X_i * Bc_i$
+
+$Yc$ = $\sum_i Y_i * Bc_i$
+
+$\sum_i Bc_i = 1$
+
+$i \in [1,N]$
+
+ \emph{En la implementación se debe normalizar las restricciones por eso la sumatoria pasa al otro lado a restar y queda igual a cero la restricci\'on}
+
+\end{center}
+
+\newpage
+
+\textbf{Diferencias de distancias entre el basurero y la ciudad i, $Zx_i$,$Zy_i$ }\\
+
+\begin{center}
+
+ $Zx_i$ = $X_i- Xb $ 
+ 
+  $Zy_i$ = $Y_i-Yb$ 
+  
+  $i \in [1,N]$
+\end{center}
+
+\textbf{Valor absoluto para  $Zx_i$,$Zy_i$ }\\
+
+\begin{center}
+
+ $Zx_i$ = $Zx_ia  - Zx_ib$ 
+ 
+  $Zy_i$ = $Zy_ia  - Zy_ib$ \medskip 
+  
+  $M*Bx_{ia} - Zx_ia >= 0$
+  
+  $M*By_{ib} - Zy_ib >= 0$\medskip 
+  
+  $ Bx_{ia} + Bx_{ib} = 1 $
+  
+  $ By_{ia} + By_{ib} = 1 $\medskip 
+  
+   $i \in [1,N]$
+   
+   $M=T+1$\bigskip
+  
+   $ |Zx_i|=Zx_ia  + Zx_ib $ 
+   
+   $ |Zy_i|=Zy_ia  +  Zy_ib $ 
+\end{center}
+
+
+\textbf{Para que  $Zx$,$Zy$  tomen los valores de la ciudad mas cercana al basurero se debe cumplir que: }\\
+
+\begin{center}
+
+ 
+  $ |Zx_i| + |Zy_i| \geq Zx + Zy $
+  
+   
+   $i \in [1,N]$
+  
+  
+
+\end{center}
+ 
+
+
+
+
+
+\end{document}
