@@ -143,14 +143,14 @@ $By_{ib}$ & Usada en las restricciones del valor absoluto para la ciudad i coord
 
 \end{tabular}\bigskip 
 
-\textbf{Usadas para  que  $Xc \in Zx_i$ y $Yc \in Zy_i$.}\\
+\textbf{Usadas para  que  $Xc \in X_i$ y $Yc \in Y_i$.}\\
 
 \begin{tabular}{l l }
 $Bc_i$ & Toma el valor de 1 si la ciudad i es la m\'as cercana \\
 \end{tabular}\bigskip
 
 
-\textbf{Usadas para  que  $Xc \in Zx_i$ y $Yc \in Zy_i$.}\\
+\textbf{Usadas para  el valor absoluto de la funci\'on objetivo.}\\
 
 
 \begin{tabular}{l l }
@@ -181,7 +181,7 @@ $\sum_i Bc_i = 1$
 
 $i \in [1,N]$
 
- \emph{En la implementación se debe normalizar las restricciones por eso la sumatoria pasa al otro lado a restar y queda igual a cero la restricci\'on}
+ \emph{En la implementación se debe normalizar las restricciones por eso la sumatoria pasa al otro lado a restar y queda igual a cero la restricci\'on, esto se hace con todas las restricciones.}
 
 \end{center}
 
@@ -237,7 +237,63 @@ $i \in [1,N]$
   
 
 \end{center}
+
+
+\textbf{Diferencia entre ciudad  m\'as cercana y basurero: }\\
+
+\begin{center}
+
  
+  $ dx = Xc - Xb $
+  
+   
+   $dy = Yc - Yb$
+  
+  
+
+\end{center}
+
+
+\subsection{Funci\'on Objetivo.}
+
+Para la funci\'on objetivo nos encontramos de nuevo con el problema del valor absoluto ya que calculamos diferencias y podemos obtener resultados con valores negativos.\\
+
+La función objetivo definida es: 
+
+\begin{center}
+      MAX( $Zx + Zy$)
+\end{center}
+
+Donde $Zx$ y $Zy$ son la representaci\'on en valor absoluto de dx y dy, respectivamente por lo cual esta funci\'on objetivo esta sujeta a : 
+
+\begin{center}
+$dx + MB - Zx \geq 0 $
+
+$dx + MB + Zx \leq M $
+
+$dx \leq Zx $
+
+$-dx \leq Zx$
+
+\end{center}
+
+
+\begin{center}
+$dy + MB - Zy \geq 0 $
+
+$dy + MB + Zy \leq M $
+
+$dy \leq Zy $
+
+$-dy \leq Zy$
+
+\end{center}
+
+\section{Implementaci\'on}
+
+Para la implementaci\'on del modelo presentado anteriormente usamos el programa lpSolver, lpSolver es un programa para resolver problemas de programación lineal y programación entera.\\
+
+LpSolver es un programa de codigo abierto licencia LGPL basado en el metodo simplex para resolver problemas de programación lineal y en el metodo branch and bound para la programaci\'on entera.
 
 
 
