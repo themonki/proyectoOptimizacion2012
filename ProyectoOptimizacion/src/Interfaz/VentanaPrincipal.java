@@ -103,7 +103,7 @@ public class VentanaPrincipal extends JFrame {
 
     	
     	jsp.setViewportView(canvasGrid);
-    	jsp.setPreferredSize(new Dimension(600,600));
+    	jsp.setPreferredSize(new Dimension(550,550));
     	
     	container.add(panelDatos, BorderLayout.EAST);
     	container.add(jsp, BorderLayout.CENTER);
@@ -133,7 +133,7 @@ public class VentanaPrincipal extends JFrame {
     
     public void propiedadesJFrame(){
         this.setTitle("Proyecto");        
-        this.setSize(1000, 600);
+        this.setSize(1000, 700);
         //this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
     }
@@ -166,6 +166,7 @@ public class VentanaPrincipal extends JFrame {
 					Lector lector = new Lector();
 					lector.leer(dirArchivo);//Devolver la estructura de datos para graficar y/o ejecutar solucion
 					canvasGrid.pruebaGrid();// luego quitar esto
+                                        canvasGrid.inicializar(lector.getNumCiudades(), lector.getTamRegion(), lector.getPosCiudades());
 					jsp.setViewportView(canvasGrid);
 				}            
             }else if(e.getSource()==btEjecutar){

@@ -1,0 +1,140 @@
+sG: 5 nC: 3 e: 0
+Objective value: 4.499999999999047
+columnas lp 43 ncol 43
+Xb: 0.500000000000367
+Yb: 5.000000000000001
+Xc: 3.0
+Yc: 3.0
+sG: 5 nC: 3 e: 1
+Objective value: 5.99999999999824
+columnas lp 43 ncol 43
+Xb: 5.000000000000001
+Yb: 5.000000000000001
+Xc: 1.0
+Yc: 3.0
+sG: 5 nC: 2 e: 2
+Objective value: 4.999999999999414
+columnas lp 32 ncol 32
+Xb: 0.0
+Yb: 5.000000000000001
+Xc: 2.0
+Yc: 2.0
+sG: 5 nC: 5 e: 3
+Objective value: 3.9999999999991194
+columnas lp 65 ncol 65
+Xb: 0.0
+Yb: 5.000000000000001
+Xc: 0.0
+Yc: 1.0
+sG: 5 nC: 2 e: 4
+Objective value: 6.999999999998532
+columnas lp 32 ncol 32
+Xb: 0.0
+Yb: 5.000000000000001
+Xc: 2.0
+Yc: 0.0
+sG: 10 nC: 7 e: 0
+Objective value: 8.999999999997971
+columnas lp 87 ncol 87
+Xb: 10.000000000000002
+Yb: 10.0
+Xc: 5.0
+Yc: 6.0
+sG: 10 nC: 4 e: 1
+Objective value: 9.999999999995481
+columnas lp 54 ncol 54
+Xb: 10.000000000000002
+Yb: 10.000000000000002
+Xc: 6.0
+Yc: 4.0
+sG: 10 nC: 8 e: 2
+Objective value: 5.999999999999002
+columnas lp 98 ncol 98
+Xb: 10.0
+Yb: 4.9999999999990745
+Xc: 7.0
+Yc: 8.0
+sG: 10 nC: 4 e: 3
+Objective value: 11.999999999992337
+columnas lp 54 ncol 54
+Xb: 10.000000000000002
+Yb: 10.000000000000002
+Xc: 4.0
+Yc: 4.0
+sG: 10 nC: 3 e: 4
+Objective value: 8.499999999999519
+columnas lp 43 ncol 43
+Xb: 0.0
+Yb: 2.5000000000004823
+Xc: 7.0
+Yc: 1.0
+sG: 15 nC: 3 e: 0
+Objective value: 18.000000000004583
+columnas lp 43 ncol 43
+Xb: 0.0
+Yb: 15.000000000000002
+Xc: 10.0
+Yc: 7.0
+sG: 15 nC: 4 e: 1
+Objective value: 15.000000000006182
+columnas lp 54 ncol 54
+Xb: 15.000000000000002
+Yb: 15.0
+Xc: 2.0
+Yc: 13.0
+sG: 15 nC: 15 e: 2
+Objective value: 10.000000000004015
+columnas lp 175 ncol 175
+Xb: 15.000000000000002
+Yb: 0.0
+Xc: 13.0
+Yc: 8.0
+sG: 15 nC: 12 e: 3
+Objective value: 8.000000000000002
+columnas lp 142 ncol 142
+Xb: 0.0
+Yb: 0.0
+Xc: 0.0
+Yc: 8.0
+sG: 15 nC: 14 e: 4
+Objective value: 8.49999999999961
+columnas lp 164 ncol 164
+Xb: 4.499999999999966
+Yb: 15.0
+Xc: 10.0
+Yc: 12.0
+sG: 20 nC: 18 e: 0
+Objective value: 11.999999999999813
+columnas lp 208 ncol 208
+Xb: 0.0
+Yb: 20.0
+Xc: 10.0
+Yc: 18.0
+sG: 20 nC: 16 e: 1
+Objective value: 11.999999999999998
+columnas lp 186 ncol 186
+Xb: 0.0
+Yb: 20.000000000000004
+Xc: 8.0
+Yc: 16.0
+sG: 20 nC: 15 e: 2
+Objective value: 8.50000000000116
+columnas lp 175 ncol 175
+Xb: 0.0
+Yb: 13.499999999998842
+Xc: 4.0
+Yc: 18.0
+sG: 20 nC: 14 e: 3
+Objective value: 14.000000000006809
+columnas lp 164 ncol 164
+Xb: 20.0
+Yb: 20.0
+Xc: 8.0
+Yc: 18.0
+sG: 20 nC: 18 e: 4
+Objective value: 14.999999999993063
+columnas lp 208 ncol 208
+Xb: 20.000000000000004
+Yb: 20.000000000000004
+Xc: 7.0
+Yc: 18.0

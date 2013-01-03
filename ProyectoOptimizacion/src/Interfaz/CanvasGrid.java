@@ -83,6 +83,9 @@ public class CanvasGrid extends JComponent{
 	/**
 	 * 
 	 */
+
+        private int numCities;
+        private int[] posCities;
 	public CanvasGrid() {
 		// TODO Auto-generated constructor stub
 		this.sizeGrid=0;// se resta 1 siempre
@@ -122,6 +125,22 @@ public class CanvasGrid extends JComponent{
 		this.setPreferredSize(d);
 		
 	}
+
+        public void inicializar(int numCiudades, int sizeGrid, int[] posCities){
+            this.numCities= numCiudades;
+            this.sizeGrid= sizeGrid;
+            this.posCities= posCities;
+
+                this.sizeRects=(int) 580/sizeGrid;
+		this.numColumns=this.numRows=sizeRects*this.sizeGrid;
+		this.initX=30;
+		this.initY=30;
+		this.maxPointY=0;
+		this.sizeCircle=12;
+		this.colorCity=Color.GREEN;
+		this.colorDump=Color.RED;
+		
+        }
 	
 	
 	
@@ -149,7 +168,7 @@ public class CanvasGrid extends JComponent{
 		}
 		
 		//LLAMAR AL METODO QUE VA A PINTAR LA REGION DADA LA ESTRUCTURA DE DATOS
-		if(this.sizeGrid!=0)paintRegion(g,this.sizeGrid);
+		if(this.sizeGrid!=0)paintRegion(g,this.sizeGrid, this.posCities, this.numCities);
 	}
 	
 	
@@ -158,15 +177,19 @@ public class CanvasGrid extends JComponent{
 	 * Función que pintara una región dada una estructura de datos, con las ciudades y (o sin) el basurero
 	 * @param g
 	 */
-	public void paintRegion(Graphics g, int sizeGrid){//AGREGAR LA ESTRUCTURA DE DATOS 
+	public void paintRegion(Graphics g, int sizeGrid, int[] pos, int ciudades){//AGREGAR LA ESTRUCTURA DE DATOS
 		//this.activarPrueba=false; // DESCOMENTAR CUANDO SE TENGA LA ESTRUCTURA DE DATOS
 		clearGrid(g);
 		int size = sizeGrid;//cantidad de ciudades a mostrar		
 		paintGrid(g);
 		int posx = 1;
 		int posy = 2;//
-		for(int i=0;i<size;i++){					
-			paintCity(g, posx, posy);
+
+                //
+                int aux=0;
+		for(int i=0;i<ciudades;i++){
+			paintCity(g, pos[aux++], pos[aux]);
+                        aux++;
 		}
 		if(this.activarDump){// si se quiere mostrar el basurero
 			paintDump(g, posx+1, posy+1);
@@ -175,7 +198,6 @@ public class CanvasGrid extends JComponent{
 		Dimension d =new Dimension((this.numColumns+this.sizeCircle*2 + this.initX*2),(this.numRows+this.sizeCircle*2)+this.initY*2);
 		this.setPreferredSize(d);
 	}
-	
 	/**
 	 * Pinta la cuadricula que representa la grilla de la región
 	 * @param g donde se va a pintar la grilla

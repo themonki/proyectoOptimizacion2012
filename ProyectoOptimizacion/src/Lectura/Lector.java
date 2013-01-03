@@ -16,6 +16,12 @@ public class Lector {
     FileReader fr;
     BufferedReader bf;
 
+    int numCiudades;
+    int tamRegion;
+    int[] ciudades;
+
+
+
     public Lector() {
         
     }
@@ -25,23 +31,30 @@ public class Lector {
             fr = new FileReader(archivo);
             bf = new BufferedReader(fr);
 
-            int tamRegion = Integer.parseInt(bf.readLine());
-            int numCiudades = Integer.parseInt(bf.readLine());
+            tamRegion = Integer.parseInt(bf.readLine());
+            numCiudades = Integer.parseInt(bf.readLine());
+
+            ciudades = new int[numCiudades*2];
+
             
-            //INFORMATIVO
+            /*//INFORMATIVO
             println(tamRegion);
             println(numCiudades);       
             /**/
-            
+            int ciudad=0;
             for (int i = 0; i < numCiudades; i++) {
                 String line = bf.readLine();
                 String valores[] = line.split(" ");
                 
                 int idCiudad = Integer.parseInt(valores[0]);
                 int posx = Integer.parseInt(valores[1]);
+                ciudades[ciudad]=posx;
+                ciudad++;
                 int posy = Integer.parseInt(valores[2]);
+                ciudades[ciudad]=posy;
+                ciudad++;
                 
-                //INFORMATIVO
+                /*//INFORMATIVO
                 for (int j = 0; j < valores.length; j++) {
                     print(valores[j] + " ");
                 }
@@ -65,6 +78,18 @@ public class Lector {
         print(arg + "\n");
     }
 
+    public int[] getPosCiudades(){
+        return ciudades;
+    }
+
+    public int getNumCiudades(){
+        return numCiudades;
+    }
+
+    public int getTamRegion(){
+        return tamRegion;
+    }
+    
     public static void main(String [] args) {
         Lector l = new Lector();
         l.leer("src/Lectura/inputexample");

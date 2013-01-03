@@ -50,11 +50,11 @@ public class Demo {
 
             colno[j] = 1; /* first column */
             row[j++] = 120;
-            System.out.println(row[0]);
+            System.out.println(row[0] + " - " + row[1]);
 
             colno[j] = 2; /* second column */
             row[j++] = 210;//j=1
-
+            System.out.println(row[0] + " - " + row[1]);
             
             //j=2
             /* add the row to lpsolve */
