@@ -12,8 +12,11 @@ package Solver;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.io.IOException;
 import lpsolve.*;
 import Lectura.Lector;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 public class Solver_basuro_andrea {
 
@@ -511,27 +514,38 @@ public class Solver_basuro_andrea {
 
     }
 
-    void Print_sol() throws LpSolveException {
+    String Print_sol() throws LpSolveException {
 
         //lp.printLp();
-        System.out.println("Objective value: " + lp.getObjective());
+        //System.out.println("Objective value: " + lp.getObjective());
+
 
 
         double[] row = new double[Ncol];
         lp.getVariables(row);
-        System.out.println("columnas lp " + lp.getNcolumns() + " ncol " + Ncol);
+        //System.out.println("columnas lp " + lp.getNcolumns() + " ncol " + Ncol);
 
-        System.out.println(lp.getColName(posDump +1) + ": " + row[posDump]);
-        System.out.println(lp.getColName(posDump +2) + ": " + row[posDump +1]);
-        System.out.println(lp.getColName(posNearbyCity +1) + ": " + row[posNearbyCity]);
-        System.out.println(lp.getColName(posNearbyCity +2) + ": " + row[posNearbyCity +1]);
-        
+        //System.out.println(lp.getColName(posDump +1) + ": " + row[posDump]);
+        //System.out.println(lp.getColName(posDump +2) + ": " + row[posDump +1]);
+        //System.out.println(lp.getColName(posNearbyCity +1) + ": " + row[posNearbyCity]);
+        //System.out.println(lp.getColName(posNearbyCity +2) + ": " + row[posNearbyCity +1]);
+
+
+        String sol = "";
+
+        sol += lp.getObjective() + "-"
+                + row[posDump] + "-" + row[posDump + 1] + "-"
+                + row[posNearbyCity] + "-" + row[posNearbyCity + 1];
+
+        //Para pruebas
 
         /*for (j = 0; j < Ncol; j++) {
-            System.out.println(lp.getColName(j + 1) + ": " + row[j]);
+        System.out.println(lp.getColName(j + 1) + ": " + row[j]);
         }*/
 
         lp.deleteLp();
+
+        return sol;
 
     }
 
@@ -545,41 +559,69 @@ public class Solver_basuro_andrea {
          * 	public static final int NODE_FRACTIONSELECT      = 3; SI
          * 	public static final int NODE_PSEUDOCOSTSELECT    = 4; SI
          * 	public static final int NODE_PSEUDONONINTSELECT  = 5; SI
-         *  public static final int NODE_PSEUDORATIOSELECT   = 6; SI
-         * 	public static final int NODE_USERSELECT          = 7; NO
-         * 	public static final int NODE_STRATEGYMASK        = NODE_USERSELECT; NO
-         * 	public static final int NODE_WEIGHTREVERSEMODE   = 8; SI
-         * 	public static final int NODE_BRANCHREVERSEMODE  = 16; NO
-         * 	public static final int NODE_GREEDYMODE         = 32; SI
-         * 	public static final int NODE_PSEUDOCOSTMODE     = 64; NO
+         *  public static final int NODE_PSEUDORATIOSELECT   = 6; SI         
+         * 	public static final int NODE_WEIGHTREVERSEMODE   = 8; SI         
+         * 	public static final int NODE_GREEDYMODE         = 32; SI         
          * 	public static final int NODE_DEPTHFIRSTMODE    = 128; SI
-         * 	public static final int NODE_RANDOMIZEMODE     = 256; SI
-         * 	public static final int NODE_GUBMODE           = 512; NO
-         * 	public static final int NODE_DYNAMICMODE      = 1024; NO
-         * 	public static final int NODE_RESTARTMODE      = 2048; NO
+         * 	public static final int NODE_RANDOMIZEMODE     = 256; SI         
          * 	public static final int NODE_BREADTHFIRSTMODE = 4096; SI
-         * 	public static final int NODE_PSEUDOFEASSELECT   = (NODE_PSEUDONONINTSELECT+NODE_WEIGHTREVERSEMODE); SI
-         *  AUTOORDER SI
+         *      AUTOORDER SI
          */
 
-        switch (type) {
+        //13 Heuristicas 2 posibilidades de iniciar una rama (ceil = 1 y floor = 2)
 
+        if (floor_ceil == 1) {
+            lp.setBbFloorfirst(LpSolve.BRANCH_CEILING);
+        } else {
+            lp.setBbFloorfirst(LpSolve.BRANCH_FLOOR);
+        }
+
+
+        switch (type) {
             case 1:
                 lp.setBbRule(LpSolve.NODE_FIRSTSELECT);
-                if (floor_ceil == 1) {
-                    lp.setBbFloorfirst(LpSolve.BRANCH_CEILING);
-                } else {
-                    lp.setBbFloorfirst(LpSolve.BRANCH_FLOOR);
-                }
                 break;
             case 2:
+                lp.setBbRule(LpSolve.NODE_GAPSELECT);
+                break;
             case 3:
+                lp.setBbRule(LpSolve.NODE_RANGESELECT);
+                break;
             case 4:
+                lp.setBbRule(LpSolve.NODE_FRACTIONSELECT);
+                break;
+            case 5:
+                lp.setBbRule(LpSolve.NODE_PSEUDOCOSTSELECT);
+                break;
+            case 6:
+                lp.setBbRule(LpSolve.NODE_PSEUDONONINTSELECT);
+                break;
+            case 7:
+                lp.setBbRule(LpSolve.NODE_PSEUDORATIOSELECT);
+                break;
+            case 8:
+                lp.setBbRule(LpSolve.NODE_WEIGHTREVERSEMODE);
+                break;
+            case 9:
+                lp.setBbRule(LpSolve.NODE_GREEDYMODE);
+                break;
+            case 10:
+                lp.setBbRule(LpSolve.NODE_DEPTHFIRSTMODE);
+                break;
+            case 11:
+                lp.setBbRule(LpSolve.NODE_RANDOMIZEMODE);
+                break;
+            case 12:
+                lp.setBbRule(LpSolve.NODE_BREADTHFIRSTMODE);
+                break;
+            case 13:
+                lp.setBbRule(LpSolve.NODE_AUTOORDER);
+                break;
         }
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
 
 
@@ -588,42 +630,52 @@ public class Solver_basuro_andrea {
             //Lector de archivos;
             Lector l = new Lector();
             int g[] = {5, 10, 15, 20};
-            for (int i = 0; i < 4; i++) {
-                for (int k = 0; k < 5; k++) {
-                    String archivo = "src/Solver/ejemplos_g_e/ejemplo_g";//"/home/andrea/Documentos/UNIVALLE/complejidad_optimizacion/proyecto/EjemplosProyecto/ejemplos_g_e/ejemplo_g";
-                    archivo += g[i] + "-" + k + ".txt";
-                    l.leer(archivo);
-                    int numCities = l.getNumCiudades();
-                    int sizeGrid = l.getTamRegion();
-                    int posCities[] = l.getPosCiudades();
+            for (int gr = 0; gr < g.length; gr++) {
+                for (int r = 1; r < 3; r++) {
 
-                    System.out.println("sG: " + sizeGrid + " nC: " +  numCities + " e: " + k);
-                    
+                    String name= "grilla"+g[gr];
+                    if(r==1){
+                        name+="ceil.csv";
+                    }else{
+                        name+="floor.csv";
+                    }
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(name));
+                    bw.write("\"h\"-\"t\"-\"nC\"-\"e\"-\"ov\"-\"xb\"-\"yb\"-\"xc\"-\"yc\"\n");
 
-                    //Tiempo para comparar heuristicas:
-                    double time_exec;
+                    for (int i = 0; i < 13; i++) {
+                        for (int k = 0; k < 5; k++) {
+                            String archivo = "src/Solver/ejemplos_g_e/ejemplo_g";//"/home/andrea/Documentos/UNIVALLE/complejidad_optimizacion/proyecto/EjemplosProyecto/ejemplos_g_e/ejemplo_g";
+                            archivo += g[gr] + "-" + k + ".txt";
+                            l.leer(archivo);
+                            int numCities = l.getNumCiudades();
+                            int sizeGrid = l.getTamRegion();
+                            int posCities[] = l.getPosCiudades();
+
+                            //System.out.println("sG: " + sizeGrid + " nC: " +  numCities + " e: " + k);
 
 
-                    //Ejemplo Erika
-                    //int sizeGrid = 5, numCities = 4;
-                    //int posCities[] = {0, 4, 0, 1, 4, 0, 4, 3};
+                            //Tiempo para comparar heuristicas:
+                            double time_exec;
 
-                    //Ejemplo 2 campus
-                    //int numCities=10, sizeGrid=10;
-                    //int posCities[] = {1, 0, 2, 3, 8, 0, 2, 7, 2, 8, 3, 10, 5, 8, 5, 9, 7, 9, 8, 8};
+                            Solver_basuro_andrea obj = new Solver_basuro_andrea(numCities, sizeGrid, posCities);
+                            obj.Create_constraints();
+                            obj.Create_func_obj();
 
-                    Solver_basuro_andrea obj = new Solver_basuro_andrea(numCities, sizeGrid, posCities);
-                    obj.Create_constraints();
-                    obj.Create_func_obj();
+                            //Pruebas heuristicas:
+                            time_exec = System.nanoTime();
+                            obj.setHeuristic(i + 1, r);
+                            obj.Create_sol();
+                            time_exec = System.nanoTime() - time_exec;
+                            time_exec /= 1000000;
 
-                    //Pruebas heuristicas:
-                    time_exec = System.nanoTime();
-                    obj.setHeuristic(1, 1);
-                    obj.Create_sol();
-                    time_exec = System.nanoTime() - time_exec;
-                    obj.Print_sol();
+                            bw.write( /*System.out.println(*/(i + 1) + "-" + time_exec + "-" + numCities + "-" + k + "-" + obj.Print_sol() + "\n");
+                            //System.out.println(obj.Print_sol());
+                        }
+
+                    }
+                    bw.close();
+
                 }
-
             }
 
 
