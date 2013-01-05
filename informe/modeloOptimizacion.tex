@@ -103,10 +103,10 @@ $Xc$ & Coordenada x de la ciudad m\'as cercana al basurero \\
 $Yc$ & Coordenada y de la ciudad m\'as cercana al basurero \\
 $Zx_i$ & Diferencia entre la coordenada x del basurero ($Xb$) y la coordenada x de la ciudad i\\
 $Zy_i$ & Diferencia entre la coordenada y del basurero ($Yb$) y la coordenada y de la ciudad i\\
-$Zx_ia$ & Usada para el valor absoluto de la diferencia entre entre la ciudad i y el basurero representa la parte positiva de la variable $Zx_i$\\
-$Zx_ib$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero, representa la parte negativa de la variable $Zx_i$\\
-$Zy_ia$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte positiva de la variable $Zy_i$\\
-$Zy_ib$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte negativa de la variable $Zy_i$\\
+$Zx_{ia}$ & Usada para el valor absoluto de la diferencia entre entre la ciudad i y el basurero representa la parte positiva de la variable $Zx_i$\\
+$Zx_{ib}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero, representa la parte negativa de la variable $Zx_i$\\
+$Zy_{ia}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte positiva de la variable $Zy_i$\\
+$Zy_{ib}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte negativa de la variable $Zy_i$\\
 $dx$ & Diferencia entre $Xc$ - $Xb$ \emph{Usado para la funci\'on objetivo}\\
 $dy$ &  Diferencia entre $Yc$ - $Yb$ \emph{Usado para la funci\'on objetivo}\\
 $Zx$ & Valor absoluto de $dx$\\
@@ -183,13 +183,20 @@ $i \in [1,N]$
 
 \begin{center}
 
- $Zx_i$ = $Zx_ia  - Zx_ib$ 
+ $Zx_i$ = $Zx_{ia}  - Zx_{ib}$ 
  
-  $Zy_i$ = $Zy_ia  - Zy_ib$ \medskip 
+  $Zy_i$ = $Zy_{ia}  - Zy_{ib}$ \medskip 
   
-  $M*Bx_{ia} - Zx_ia >= 0$
+  $M*Bx_{ia} - Zx_{ia} >= 0$
   
-  $M*By_{ib} - Zy_ib >= 0$\medskip 
+  $M*Bx_{ib} - Zx_{ib} >= 0$\medskip 
+  
+    $M*By_{ia} - Zy_{ia} >= 0$
+  
+  $M*By_{ib} - Zy_{ib} >= 0$\medskip 
+ 
+  
+  
   
   $ Bx_{ia} + Bx_{ib} = 1 $
   
@@ -199,10 +206,11 @@ $i \in [1,N]$
    
    $M=T+1$\bigskip
   
-   $ |Zx_i|=Zx_ia  + Zx_ib $ 
+   $ |Zx_i|=Zx_{ia}  + Zx_{ib} $ 
    
-   $ |Zy_i|=Zy_ia  +  Zy_ib $ 
+   $ |Zy_i|=Zy_{ia}  +  Zy_{ib} $ 
 \end{center}
+
 
 
 \textbf{Para que  $Zx$,$Zy$  tomen los valores de la ciudad más cercana al basurero se debe cumplir que: }\\
@@ -248,21 +256,23 @@ La función objetivo definida es:
 Donde $Zx$ y $Zy$ son la representaci\'on en valor absoluto de $dx$ y $dy$, respectivamente por lo cual ésta funci\'on objetivo está sujeta a : 
 
 \begin{center}
-$dx + MB - Zx \geq 0 $
+$dx + M*B_{x0} - Zx \geq 0 $
 
-$dx + MB + Zx \leq M $
+$dx + M*B_{x0} + Zx \leq M $
 
 $dx \leq Zx $
 
 $-dx \leq Zx$
 
+$M=T*2$
+
 \end{center}
 
 
 \begin{center}
-$dy + MB - Zy \geq 0 $
+$dy + M*B_{y0} - Zy \geq 0 $
 
-$dy + MB + Zy \leq M $
+$dy + M*B_{y0} + Zy \leq M $
 
 $dy \leq Zy $
 
@@ -917,7 +927,7 @@ la función piso, se debe de buscar de manera más rápida el valor de las otras
 Heurísticas como la número $2$, $4$, $8$ y $13$ perdían mucho tiempo tratando de optimizar la variable a escoger, sin llegar rápido a la solución. Esto se debe a que debían realizar
 comparaciones de costos de cada una de las ramas para determinar por cual seguir.\\
 
-\newpage
+
 \section{Implementaci\'on}
 
 Para la implementaci\'on del modelo presentado anteriormente usamos el programa lpSolver, lpSolver es un programa para resolver problemas de programación lineal y programación entera.\\
@@ -928,33 +938,62 @@ Usamos además la librería de LpSolver para java, puesto que éste fue nuestro 
 ver la solución encontrada.\\
 
 Un ejemplo de la implementación de una restricción es dado a continuación, lp corresponde al modelo en LpSolver:\\
+\begin{lstlisting}[language=Java]
+LpSolve lp= LpSolve.makeLp(0, Ncol);
+\end{lstlisting}
+
+Funci\'on que instancia el lp se le define el numero de columnas (variables). 
+
 
 \begin{lstlisting}[language=Java]
-// restricciones obvias Xb <= sizeGrid y Yb <= sizeGrid y
-        // Xc <= sizeGrid y Yc <= sizeGrid
-        for (int i = 0; i < 2; i++) {
-
-            int[] colno = new int[Ncol];
-            double[] row = new double[Ncol];
-
-            colno[ i + posDump] = 1 + i + posDump;
-            row[ i + posDump] = 1;
-
-            lp.addConstraintex(Ncol, row, colno, LpSolve.LE, sizeGrid);
-
-            colno = new int[Ncol];
-            row = new double[Ncol];
-
-            colno[ i + posNearbyCity] = 1 + i + posNearbyCity;
-            row[ i + posNearbyCity] = 1;
-
-            lp.addConstraintex(Ncol, row, colno, LpSolve.LE, sizeGrid); //Se anade la restriccion al modelo
-
-        }
+lp.addConstraintex(Ncol, row, colno, LpSolve.LE, sizeGrid);
 \end{lstlisting}
+Funci\'on que crea la restricci\'on, row es un arreglo con los coeficientes de las variables ingresadas en el arreglo colno   LpSolve.LE hace parte de las definiciones de las condiciones mayor igual, menor o igual, igual.
+
+\begin{lstlisting}[language=Java]
+lp.setBinary(posVarBinary, true);
+\end{lstlisting}
+Se le indica al solver que la variable ubicada en la columna posVarBinary es binaria.
+
+\begin{lstlisting}[language=Java]
+
+lp.setUnbounded(j + 1);
+  
+\end{lstlisting}
+
+Se le indica al solver que la variable ubicada en la posici\'on j+1 es irrestricta
+
+\begin{lstlisting}[language=Java]
+lp.setColName(1, "Zx");
+\end{lstlisting}
+Funci\'on que nos permite asignarle un nombre a la variable para una mejor visualizaci\'on.
+
+
+\begin{lstlisting}[language=Java]
+
+lp.setObjFnex(Ncol, row, colno);
+lp.setMaxim();	
+
+\end{lstlisting}
+Definimos cuales son las variables involucradas en la funci\'on objetivo , luego  definimos que debemos maximizar esa funci\'on\\
 
 Para realizar las pruebas se realizó una clase que generara los archivos de prueba (.txt) y para obtener los datos de solución y desempeño se generaron archivos (.csv). Para ver estos
 archivos por favor revisar las carpetas (analisis\_heuristicas) y (src/Solver/ejemplos\_g\_e) respectivamente.
+
+\section{Interfaz de Usuario}
+La imagen a continua\'on muestra la interfaz de usuario donde encontramos la grilla, donde se ubican las ciudades y el basurero, ademas en el panel derecho podemos ver informaci\'on adicional como el valor de la funci\'on objetivo o las coordenadas del basurero
+
+\begin{figure}[ht]
+\begin{minipage}[b]{1\linewidth}
+ \centering
+ \includegraphics[scale=0.3]{basurero.png}
+ % grilla5ceilfloor.png: 624x328 pixel, 72dpi, 22.01x11.57 cm, bb=0 0 624 328
+ \caption{visualizaci\'on en la interfaz de usuario}
+ \label{fig:heu3}
+ \end{minipage}
+\end{figure}
+
+
 
 \newpage
 \section{Conclusiones}
