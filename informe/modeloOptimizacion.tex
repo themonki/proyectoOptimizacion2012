@@ -95,7 +95,7 @@ $Y_i$ & Coordenada y de la ciudad i. \\
 
 
 \subsection{Variables del Problema}
-\begin{tabular}{l l }
+\begin{tabular}{l p{4.75in} }
 $Xb$ & Coordenada x del basurero \\
 $Yb$ & Coordenada y del basurero \\
 $Xc$ & Coordenada x de la ciudad m\'as cercana al basurero \\
@@ -107,14 +107,14 @@ $Zx_i$ & Diferencia entre la coordenada x del basurero ($Xb$) y la coordenada x 
 $Zy_i$ & Diferencia entre la coordenada y del basurero ($Yb$) y la coordenada y de la ciudad i\\
 
 
-$Zx_ia$ & Usada para el valor absoluto de la diferencia entre entre la ciudad i y el basurero representa la parte positiva de la variable $Zx_i$\\
+$Zx_{ia}$ & Usada para el valor absoluto de la diferencia entre entre la ciudad i y el basurero representa la parte positiva de la variable $Zx_i$\\
 
-$Zx_ib$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero, representa la parte negativa de la variable $Zx_i$\\
+$Zx_{ib}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero, representa la parte negativa de la variable $Zx_i$\\
 
 
-$Zy_ia$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte positiva de la variable $Zy_i$\\
+$Zy_{ia}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte positiva de la variable $Zy_i$\\
 
-$Zy_ib$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte negativa de la variable $Zy_i$\\
+$Zy_{ib}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte negativa de la variable $Zy_i$\\
 
 
 
@@ -185,7 +185,7 @@ $i \in [1,N]$
 
 \end{center}
 
-\newpage
+
 
 \textbf{Diferencias de distancias entre el basurero y la ciudad i, $Zx_i$,$Zy_i$ }\\
 
@@ -202,13 +202,20 @@ $i \in [1,N]$
 
 \begin{center}
 
- $Zx_i$ = $Zx_ia  - Zx_ib$ 
+ $Zx_i$ = $Zx_{ia}  - Zx_{ib}$ 
  
-  $Zy_i$ = $Zy_ia  - Zy_ib$ \medskip 
+  $Zy_i$ = $Zy_{ia}  - Zy_{ib}$ \medskip 
   
-  $M*Bx_{ia} - Zx_ia >= 0$
+  $M*Bx_{ia} - Zx_{ia} >= 0$
   
-  $M*By_{ib} - Zy_ib >= 0$\medskip 
+  $M*Bx_{ib} - Zx_{ib} >= 0$\medskip 
+  
+    $M*By_{ia} - Zy_{ia} >= 0$
+  
+  $M*By_{ib} - Zy_{ib} >= 0$\medskip 
+ 
+  
+  
   
   $ Bx_{ia} + Bx_{ib} = 1 $
   
@@ -218,9 +225,9 @@ $i \in [1,N]$
    
    $M=T+1$\bigskip
   
-   $ |Zx_i|=Zx_ia  + Zx_ib $ 
+   $ |Zx_i|=Zx_{ia}  + Zx_{ib} $ 
    
-   $ |Zy_i|=Zy_ia  +  Zy_ib $ 
+   $ |Zy_i|=Zy_{ia}  +  Zy_{ib} $ 
 \end{center}
 
 
@@ -267,21 +274,23 @@ La función objetivo definida es:
 Donde $Zx$ y $Zy$ son la representaci\'on en valor absoluto de dx y dy, respectivamente por lo cual esta funci\'on objetivo esta sujeta a : 
 
 \begin{center}
-$dx + MB - Zx \geq 0 $
+$dx + M*B_{x0} - Zx \geq 0 $
 
-$dx + MB + Zx \leq M $
+$dx + M*B_{x0} + Zx \leq M $
 
 $dx \leq Zx $
 
 $-dx \leq Zx$
 
+$M=T*2$
+
 \end{center}
 
 
 \begin{center}
-$dy + MB - Zy \geq 0 $
+$dy + M*B_{y0} - Zy \geq 0 $
 
-$dy + MB + Zy \leq M $
+$dy + M*B_{y0} + Zy \leq M $
 
 $dy \leq Zy $
 
