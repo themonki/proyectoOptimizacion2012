@@ -45,7 +45,7 @@
    {\lstset{#1}\pagebreak[0]}{\pagebreak[0]}
 
 %LENGUAJE OZ
-\lstdefinelanguage{OZ}
+\lstdefinelanguage{Java}
 {
   morestring=[b]',
   morecomment=[s]{\%}{\%},
@@ -96,17 +96,37 @@ $Y_i$ & Coordenada y de la ciudad i. \\
 
 
 \subsection{Variables del Problema}
+<<<<<<< HEAD
 \begin{tabular}{p{1cm} p{0.9\textwidth}}
+=======
+\begin{tabular}{l p{4.75in} }
+>>>>>>> 223695174e69a656caaf5ea761ea061d4793fbbb
 $Xb$ & Coordenada x del basurero \\
 $Yb$ & Coordenada y del basurero \\
 $Xc$ & Coordenada x de la ciudad m\'as cercana al basurero \\
 $Yc$ & Coordenada y de la ciudad m\'as cercana al basurero \\
 $Zx_i$ & Diferencia entre la coordenada x del basurero ($Xb$) y la coordenada x de la ciudad i\\
 $Zy_i$ & Diferencia entre la coordenada y del basurero ($Yb$) y la coordenada y de la ciudad i\\
+<<<<<<< HEAD
 $Zx_ia$ & Usada para el valor absoluto de la diferencia entre entre la ciudad i y el basurero representa la parte positiva de la variable $Zx_i$\\
 $Zx_ib$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero, representa la parte negativa de la variable $Zx_i$\\
 $Zy_ia$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte positiva de la variable $Zy_i$\\
 $Zy_ib$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte negativa de la variable $Zy_i$\\
+=======
+
+
+$Zx_{ia}$ & Usada para el valor absoluto de la diferencia entre entre la ciudad i y el basurero representa la parte positiva de la variable $Zx_i$\\
+
+$Zx_{ib}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero, representa la parte negativa de la variable $Zx_i$\\
+
+
+$Zy_{ia}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte positiva de la variable $Zy_i$\\
+
+$Zy_{ib}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte negativa de la variable $Zy_i$\\
+
+
+
+>>>>>>> 223695174e69a656caaf5ea761ea061d4793fbbb
 $dx$ & Diferencia entre $Xc$ - $Xb$ \emph{Usado para la funci\'on objetivo}\\
 $dy$ &  Diferencia entre $Yc$ - $Yb$ \emph{Usado para la funci\'on objetivo}\\
 $Zx$ & Valor absoluto de $dx$\\
@@ -167,6 +187,10 @@ $i \in [1,N]$
 
 \end{center}
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 223695174e69a656caaf5ea761ea061d4793fbbb
 
 \textbf{Diferencias de distancias entre el basurero y la ciudad i, $Zx_i$,$Zy_i$ }\\
 
@@ -183,13 +207,20 @@ $i \in [1,N]$
 
 \begin{center}
 
- $Zx_i$ = $Zx_ia  - Zx_ib$ 
+ $Zx_i$ = $Zx_{ia}  - Zx_{ib}$ 
  
-  $Zy_i$ = $Zy_ia  - Zy_ib$ \medskip 
+  $Zy_i$ = $Zy_{ia}  - Zy_{ib}$ \medskip 
   
-  $M*Bx_{ia} - Zx_ia >= 0$
+  $M*Bx_{ia} - Zx_{ia} >= 0$
   
-  $M*By_{ib} - Zy_ib >= 0$\medskip 
+  $M*Bx_{ib} - Zx_{ib} >= 0$\medskip 
+  
+    $M*By_{ia} - Zy_{ia} >= 0$
+  
+  $M*By_{ib} - Zy_{ib} >= 0$\medskip 
+ 
+  
+  
   
   $ Bx_{ia} + Bx_{ib} = 1 $
   
@@ -199,9 +230,9 @@ $i \in [1,N]$
    
    $M=T+1$\bigskip
   
-   $ |Zx_i|=Zx_ia  + Zx_ib $ 
+   $ |Zx_i|=Zx_{ia}  + Zx_{ib} $ 
    
-   $ |Zy_i|=Zy_ia  +  Zy_ib $ 
+   $ |Zy_i|=Zy_{ia}  +  Zy_{ib} $ 
 \end{center}
 
 
@@ -248,21 +279,23 @@ La función objetivo definida es:
 Donde $Zx$ y $Zy$ son la representaci\'on en valor absoluto de $dx$ y $dy$, respectivamente por lo cual ésta funci\'on objetivo está sujeta a : 
 
 \begin{center}
-$dx + MB - Zx \geq 0 $
+$dx + M*B_{x0} - Zx \geq 0 $
 
-$dx + MB + Zx \leq M $
+$dx + M*B_{x0} + Zx \leq M $
 
 $dx \leq Zx $
 
 $-dx \leq Zx$
 
+$M=T*2$
+
 \end{center}
 
 
 \begin{center}
-$dy + MB - Zy \geq 0 $
+$dy + M*B_{y0} - Zy \geq 0 $
 
-$dy + MB + Zy \leq M $
+$dy + M*B_{y0} + Zy \leq M $
 
 $dy \leq Zy $
 
@@ -922,6 +955,7 @@ comparaciones de costos de cada una de las ramas para determinar por cual seguir
 
 Para la implementaci\'on del modelo presentado anteriormente usamos el programa lpSolver, lpSolver es un programa para resolver problemas de programación lineal y programación entera.\\
 
+<<<<<<< HEAD
 LpSolver es un programa de código abierto licencia LGPL basado en el método simplex para resolver problemas de programación lineal y en el método branch and bound para resolver problemas de programaci\'on entera.\\
 
 Usamos además la librería de LpSolver para java, puesto que éste fue nuestro lenguaje de programación. El proyecto fue desarrollado en Netbeans, se cuenta con una interfaz gráfica que permite
@@ -933,10 +967,47 @@ Un ejemplo de la implementación de una restricción es dado a continuación, lp
 // restricciones obvias Xb <= sizeGrid y Yb <= sizeGrid y
         // Xc <= sizeGrid y Yc <= sizeGrid
         for (int i = 0; i < 2; i++) {
+=======
+LpSolver es un programa de codigo abierto licencia LGPL basado en el metodo simplex para resolver problemas de programación lineal y en el metodo branch and bound para  resolver problemas de programaci\'on entera.\\
+
+Nuestro protecto fue contruido con el ID netbeans,  los metodos basicos que usamos de la libreria  fueron : 
+
+
+\begin{lstlisting}[language=Java]
+LpSolve lp= LpSolve.makeLp(0, Ncol);
+\end{lstlisting}
+
+Funci\'on que instancia el lp se le define el numero de columnas (variables). 
+
+
+\begin{lstlisting}[language=Java]
+lp.addConstraintex(Ncol, row, colno, LpSolve.LE, sizeGrid);
+\end{lstlisting}
+Funci\'on que crea la restricci\'on, row es un arreglo con los coeficientes de las variables ingresadas en el arreglo colno   LpSolve.LE hace parte de las definiciones de las condiciones mayor igual, menor o igual, igual.
+
+\begin{lstlisting}[language=Java]
+lp.setBinary(posVarBinary, true);
+\end{lstlisting}
+Se le indica al solver que la variable ubicada en la columna posVarBinary es binaria.
+
+\begin{lstlisting}[language=Java]
+
+lp.setUnbounded(j + 1);
+  
+\end{lstlisting}
+
+Se le indica al solver que la variable ubicada en la posici\'on j+1 es irrestricta
+
+\begin{lstlisting}[language=Java]
+lp.setColName(1, "Zx");
+\end{lstlisting}
+Funci\'on que nos permite asignarle un nombre a la variable para una mejor visualizaci\'on.
+>>>>>>> 223695174e69a656caaf5ea761ea061d4793fbbb
 
             int[] colno = new int[Ncol];
             double[] row = new double[Ncol];
 
+<<<<<<< HEAD
             colno[ i + posDump] = 1 + i + posDump;
             row[ i + posDump] = 1;
 
@@ -973,7 +1044,15 @@ afectar los tiempo de respuesta. Es por ello que se debe analizar el modelo desa
 \item La librería para java LpSolve permite implementar modelos de Programación Lineal con mayor fluidez. Esto ayuda a enfocarse mas en las restricciones que se están escribiendo que en cómo 
 hacer restricciones en java. Enfocarse mas en el qué que en el cómo.
 \end{itemize}
+=======
+\begin{lstlisting}[language=Java]
+>>>>>>> 223695174e69a656caaf5ea761ea061d4793fbbb
 
+lp.setObjFnex(Ncol, row, colno);
+lp.setMaxim();	
+	
+\end{lstlisting}
+Definimos cuales son las variables involucradas en la funci\'on objetivo , luego  definimos que debemos maximizar esa funci\'on
 
 
 \end{document}
