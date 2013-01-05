@@ -1,0 +1,350 @@
+\documentclass[10pt]{article}
+\usepackage[right=2cm,left=2cm,top=2cm,bottom=3cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{graphicx}
+%\usepackage{multicol}
+
+%COLORES CODIGO
+\definecolor{gray97}{gray}{.97}
+\definecolor{gray75}{gray}{.75}
+\definecolor{gray45}{gray}{.45}
+\definecolor{claregreen}{RGB}{4,180,95}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+
+
+\lstset{ frame=Ltb,
+     framerule=0pt,
+     aboveskip=0.5cm,
+     framextopmargin=3pt,
+     framexbottommargin=3pt,
+     framexleftmargin=0.4cm,
+     framesep=0pt,
+     rulesep=.4pt,
+     backgroundcolor=\color{gray97},
+     rulesepcolor=\color{black},
+     %
+     stringstyle=\ttfamily,
+     showstringspaces = false,
+     basicstyle=\small\ttfamily,
+     commentstyle=\color{gray45},
+     keywordstyle=\bfseries,
+     %
+     numbers=left,
+     numbersep=15pt,
+     numberstyle=\tiny,
+     numberfirstline = false,
+     breaklines=true,
+   }
+
+% minimizar fragmentado de listados
+\lstnewenvironment{listing}[1][]
+   {\lstset{#1}\pagebreak[0]}{\pagebreak[0]}
+
+%LENGUAJE OZ
+\lstdefinelanguage{Java}
+{
+  morestring=[b]',
+  morecomment=[s]{\%}{\%},
+  stringstyle=\color{claregreen},
+  keywordstyle=\color{blue}\bfseries,
+  morekeywords={proc, end, \$},% list your attributes here
+  emph={REQUIRED},
+  emphstyle=\color{red}
+}
+
+%MODO CONSOLA
+\lstdefinestyle{consola}
+   {basicstyle=\scriptsize\bf\ttfamily,
+    backgroundcolor=\color{gray75},
+   }
+
+
+\title{ \textbf{Modelo Matematico para la Acomodación de un Basurero en una Ciudad.}}
+
+\author{Maria Andrea Cruz Blandon 0831816 \and Edgar Andres Moncada  Taborda 0832294 \and Hebert Vargas Tello 1124798 \and Luis Felipe Vargas Rojas 0836342  }
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Introducci\'on}
+En el siguiente documento se explicará el modelo contruido a través del paradigma de la programacion linea (lp), para resolver el problema de la acomodación de un basurero en una ciudad, el problema se basa en que la construcci\'on del basurero se debe realizar en el lugar  m\'as alejado posible de la ciudad mas cercana, esto debido a los malos olores que genera y a las molestias de cada ciudad por dicha construcción.\\
+
+Los principales problemas a los que nos enfentramos al tratar de modelar este problema con lp fuer\'on  definir los dominios las variables, establecer una forma para definir distancias entre ciudades y el basurero a trav\'es de un valor absoluto, definir a traves de restricciones la ciudad m\'as cercana entre otros detalles que se explicaran en el documento.\\
+
+Para la implementación del modelo usamos el programa lpsolve y una libreria de java que genera el archivo de entrada para el lpsolve teniendo en cuenta los valores de entrada.
+
+\section{Modelo Programaci\'on Lineal} 
+
+\subsection{Datos de Entrada}
+\begin{tabular}{l l }
+$T$ & Tamaño de la grilla (T x T)\\
+$N$ & Numero de ciudades.\\ 
+$X_i$ & Coordenada x de la ciudad i. \\
+$Y_i$ & Coordenada y de la ciudad i. \\
+
+\end{tabular}
+
+
+
+\subsection{Variables del Problema}
+\begin{tabular}{l p{4.75in} }
+$Xb$ & Coordenada x del basurero \\
+$Yb$ & Coordenada y del basurero \\
+$Xc$ & Coordenada x de la ciudad m\'as cercana al basurero \\
+$Yc$ & Coordenada y de la ciudad m\'as cercana al basurero \\
+
+
+$Zx_i$ & Diferencia entre la coordenada x del basurero ($Xb$) y la coordenada x de la ciudad i\\
+
+$Zy_i$ & Diferencia entre la coordenada y del basurero ($Yb$) y la coordenada y de la ciudad i\\
+
+
+$Zx_{ia}$ & Usada para el valor absoluto de la diferencia entre entre la ciudad i y el basurero representa la parte positiva de la variable $Zx_i$\\
+
+$Zx_{ib}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero, representa la parte negativa de la variable $Zx_i$\\
+
+
+$Zy_{ia}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte positiva de la variable $Zy_i$\\
+
+$Zy_{ib}$ & Usada para el valor absoluto de la diferencia entre la ciudad i y el basurero representa la parte negativa de la variable $Zy_i$\\
+
+
+
+$dx$ & Diferencia entre $Xc$ - $Xb$ \emph{Usado para la funci\'on objetivo}\\
+
+$dy$ &  Diferencia entre $Yc$ - $Yb$ \emph{Usado para la funci\'on objetivo}\\
+
+
+$Zx$ & Valor absoluto de $dx$\\
+
+$Zy$ & Valor absoluto de $dy$ \\
+\end{tabular}
+
+
+
+
+
+\subsection{Variables Binarias del Problema}
+\textbf{Usadas para el Valor Absoluto de la Diferencia de cada Ciudad con el Basurero: }\\
+
+\begin{tabular}{l l }
+ $Bx_{ia}$ & Usada en las restricciones del valor absoluto para la ciudad i coordenada x \\
+$Bx_{ib}$ & Usada en las restricciones del valor absoluto para la ciudad i  coordenada x \\
+$By_{ia}$ & Usada en las restricciones del valor absoluto para la ciudad i coordenada y \\
+$By_{ib}$ & Usada en las restricciones del valor absoluto para la ciudad i coordenada y \\
+
+\end{tabular}\bigskip 
+
+\textbf{Usadas para  que  $Xc \in X_i$ y $Yc \in Y_i$.}\\
+
+\begin{tabular}{l l }
+$Bc_i$ & Toma el valor de 1 si la ciudad i es la m\'as cercana \\
+\end{tabular}\bigskip
+
+
+\textbf{Usadas para  el valor absoluto de la funci\'on objetivo.}\\
+
+
+\begin{tabular}{l l }
+$Bx0$ &   Usada para el valor absoluto en la función objetivo coordenada x \\
+$By0$ &   Usada para el valor absoluto en la función objetivo coordenada y \\
+\end{tabular}\bigskip
+
+
+
+\subsection{Restricciones Obvias}
+\textbf{Dominios de las Variables}\\
+
+\begin{center}
+ $0$ $\leq $ $Xb$,$Yb$,$Xc$,$Yc$, $Zx$, $Zy$  $\leq $ $T$
+ 
+ $Zx_i$ , $Zy_i$ Son variables irrestrictas.
+\end{center}
+
+\subsection{Restricciones del Problema}
+\textbf{Garantizar que:  $Xc \in X_i$ y $Yc \in Y_i$. }\\
+
+\begin{center}
+$Xc$ = $\sum_i X_i * Bc_i$
+
+$Yc$ = $\sum_i Y_i * Bc_i$
+
+$\sum_i Bc_i = 1$
+
+$i \in [1,N]$
+
+ \emph{En la implementación se debe normalizar las restricciones por eso la sumatoria pasa al otro lado a restar y queda igual a cero la restricci\'on, esto se hace con todas las restricciones.}
+
+\end{center}
+
+
+
+\textbf{Diferencias de distancias entre el basurero y la ciudad i, $Zx_i$,$Zy_i$ }\\
+
+\begin{center}
+
+ $Zx_i$ = $X_i- Xb $ 
+ 
+  $Zy_i$ = $Y_i-Yb$ 
+  
+  $i \in [1,N]$
+\end{center}
+
+\textbf{Valor absoluto para  $Zx_i$,$Zy_i$ }\\
+
+\begin{center}
+
+ $Zx_i$ = $Zx_{ia}  - Zx_{ib}$ 
+ 
+  $Zy_i$ = $Zy_{ia}  - Zy_{ib}$ \medskip 
+  
+  $M*Bx_{ia} - Zx_{ia} >= 0$
+  
+  $M*Bx_{ib} - Zx_{ib} >= 0$\medskip 
+  
+    $M*By_{ia} - Zy_{ia} >= 0$
+  
+  $M*By_{ib} - Zy_{ib} >= 0$\medskip 
+ 
+  
+  
+  
+  $ Bx_{ia} + Bx_{ib} = 1 $
+  
+  $ By_{ia} + By_{ib} = 1 $\medskip 
+  
+   $i \in [1,N]$
+   
+   $M=T+1$\bigskip
+  
+   $ |Zx_i|=Zx_{ia}  + Zx_{ib} $ 
+   
+   $ |Zy_i|=Zy_{ia}  +  Zy_{ib} $ 
+\end{center}
+
+
+\textbf{Para que  $Zx$,$Zy$  tomen los valores de la ciudad mas cercana al basurero se debe cumplir que: }\\
+
+\begin{center}
+
+ 
+  $ |Zx_i| + |Zy_i| \geq Zx + Zy $
+  
+   
+   $i \in [1,N]$
+  
+  
+
+\end{center}
+
+
+\textbf{Diferencia entre ciudad  m\'as cercana y basurero: }\\
+
+\begin{center}
+
+ 
+  $ dx = Xc - Xb $
+  
+   
+   $dy = Yc - Yb$
+  
+  
+
+\end{center}
+
+
+\subsection{Funci\'on Objetivo.}
+
+Para la funci\'on objetivo nos encontramos de nuevo con el problema del valor absoluto ya que calculamos diferencias y podemos obtener resultados con valores negativos.\\
+
+La función objetivo definida es: 
+
+\begin{center}
+      MAX( $Zx + Zy$)
+\end{center}
+
+Donde $Zx$ y $Zy$ son la representaci\'on en valor absoluto de dx y dy, respectivamente por lo cual esta funci\'on objetivo esta sujeta a : 
+
+\begin{center}
+$dx + M*B_{x0} - Zx \geq 0 $
+
+$dx + M*B_{x0} + Zx \leq M $
+
+$dx \leq Zx $
+
+$-dx \leq Zx$
+
+$M=T*2$
+
+\end{center}
+
+
+\begin{center}
+$dy + M*B_{y0} - Zy \geq 0 $
+
+$dy + M*B_{y0} + Zy \leq M $
+
+$dy \leq Zy $
+
+$-dy \leq Zy$
+
+\end{center}
+
+\section{Implementaci\'on}
+
+Para la implementaci\'on del modelo presentado anteriormente usamos el programa lpSolver, lpSolver es un programa para resolver problemas de programación lineal y programación entera.\\
+
+LpSolver es un programa de codigo abierto licencia LGPL basado en el metodo simplex para resolver problemas de programación lineal y en el metodo branch and bound para  resolver problemas de programaci\'on entera.\\
+
+Nuestro protecto fue contruido con el ID netbeans,  los metodos basicos que usamos de la libreria  fueron : 
+
+
+\begin{lstlisting}[language=Java]
+LpSolve lp= LpSolve.makeLp(0, Ncol);
+\end{lstlisting}
+
+Funci\'on que instancia el lp se le define el numero de columnas (variables). 
+
+
+\begin{lstlisting}[language=Java]
+lp.addConstraintex(Ncol, row, colno, LpSolve.LE, sizeGrid);
+\end{lstlisting}
+Funci\'on que crea la restricci\'on, row es un arreglo con los coeficientes de las variables ingresadas en el arreglo colno   LpSolve.LE hace parte de las definiciones de las condiciones mayor igual, menor o igual, igual.
+
+\begin{lstlisting}[language=Java]
+lp.setBinary(posVarBinary, true);
+\end{lstlisting}
+Se le indica al solver que la variable ubicada en la columna posVarBinary es binaria.
+
+\begin{lstlisting}[language=Java]
+
+lp.setUnbounded(j + 1);
+  
+\end{lstlisting}
+
+Se le indica al solver que la variable ubicada en la posici\'on j+1 es irrestricta
+
+\begin{lstlisting}[language=Java]
+lp.setColName(1, "Zx");
+\end{lstlisting}
+Funci\'on que nos permite asignarle un nombre a la variable para una mejor visualizaci\'on.
+
+
+\begin{lstlisting}[language=Java]
+
+lp.setObjFnex(Ncol, row, colno);
+lp.setMaxim();	
+
+\end{lstlisting}
+Definimos cuales son las variables involucradas en la funci\'on objetivo , luego  definimos que debemos maximizar esa funci\'on
+
+
+\end{document}
