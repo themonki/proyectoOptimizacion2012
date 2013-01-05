@@ -155,7 +155,7 @@ Tomamos la mejor heurística usando techo y la mejor heurística usando piso, co
 
 
  
-\begin{table}[ht]
+\begin{table}
 \begin{minipage}[b]{1\linewidth}
  \centering
     \begin{tabular}{|c|c|}
