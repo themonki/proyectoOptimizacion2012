@@ -501,6 +501,10 @@ public class Solver_basuro_ultimate {
 
     void Create_sol() throws LpSolveException {
 
+        //B&B
+        lp.setBbRule(LpSolve.NODE_DEPTHFIRSTMODE);
+        lp.setBbFloorfirst(LpSolve.BRANCH_FLOOR);
+
         //generar modelo en formato lp
         lp.writeLp("modelFelipe.lp");
 
