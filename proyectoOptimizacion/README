@@ -1,0 +1,27 @@
+Para ejecutar el proyecto es necesario primero instalar las librerias de 
+lpsolve y configurar el entorno de desarrollo.
+
+Los siguientes pasos se deben de realizar sobre una maquina Linux de 32 bits y con java SE 6.
+
+Primero deben poner en el carpeta /usr/local/lib la carpeta lp_solve_5.5.2.0_dev_ux32   
+
+	sudo cp -R /librerias/lp_solve_5.5.2.0_dev_ux32 /usr/local/lib
+
+luego deben copiar el archivo  liblpsolve55.so (esta dentro del lp_solve_5.5.2.0_dev_ux32, ojo copiar no mover  ) en la carpeta /usr/lib
+
+	sudo cp librerias/lp_solve_5.5.2.0_dev_ux32/liblpsolve55.so /usr/lib
+
+luego se debe de ubicar en la carpeta y ejecutar el comando ldconfig como root
+	cd /usr/lib
+	sudo ldconfig
+
+Una vez agregado se puede abrir el proyecto para netbeans o eclipse a partir de las fuentes
+
+Agregar el jar al proyecto que se encuentra en librerias/lpsolve55j.jar
+
+luego encima del proyecto click derecho propiedades RUn en el campo MV o VM poner:
+
+	-Djava.library.path="/usr/local/lib/lp_solve_5.5.2.0_dev_ux32"
+
+si se tiene problemas agregar al path la ruta del lp_solve_5.5.2.0_dev_ux32
+	export PATH=$PATH:/usr/local/lib/lp_solve_5.5.2.0_dev_ux32

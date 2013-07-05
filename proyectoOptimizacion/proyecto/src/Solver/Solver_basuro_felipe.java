@@ -12,96 +12,49 @@ package Solver;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
 import lpsolve.*;
 
-public class Solver_basuro_ultimate {
+public class Solver_basuro_felipe {
 
     //ciudades ejemplo 1 campus virtual
     //int numCities = 4
     // int sizeGrid = 10
     //int posCities[] = {3, 7, 5, 6, 10, 6, 8, 10};
     // x1 y1
+
     //ciudades ejemplo 2 campus virtual
-    private int numCities;
-    private int sizeGrid;
-    private int posCities[];
+    int numCities = 10;
+    int sizeGrid = 10;
+    int posCities[] = {1, 0, 2, 3, 8, 0, 2, 7, 2, 8, 3, 10, 5, 8, 5, 9, 7, 9, 8, 8};
+
     //Ejemplo Erika
-    //int sizeGrid=5, numCities= 4;
-    //int posCities[] = {0, 4, 0, 1, 4, 0, 4, 3};
+            //int sizeGrid=5, numCities= 4;
+            //int posCities[] = {0, 4, 0, 1, 4, 0, 4, 3};
+
     // Posiciones en la matriz del simplex,
     // ejemplo: posición de la variable Xb en la matriz del simplex
     // Posde Xb = posDump y Pos de Yb = posDump +1
+
     // posiccion basurero
-    private int posDump;
+    int posDump = (numCities * 2) + 2;
     // posiccion ciudad cercana
-    private int posNearbyCity;
+    int posNearbyCity = 4 + (numCities * 6);
     // posicion diferencia entre ciudad cercana y basurero
-    private int posDelta;
+    int posDelta = 6 + (numCities * 6);
     // posicion variables binarias utilizadas en la funcion objetivo
-    private int posBinaryObj;
+    int posBinaryObj = (8 + (numCities * 6));
     //posicion variables binarias que garantizan que la ciudad cercana es una de las ciudades dadas como entradas
-    private int posBinaryCity;
+    int posBinaryCity = 10 + (numCities * 6);
     // posicion variables auxiliares que remplazaran la diferencia entre cada ciudad  y el basurero
-    private int posVarDeltaAux;
+    int posVarDeltaAux = 10 + (numCities * 7);
     //posicion variables binarias que aseguraran que se escoja una  de las ciudades dadas inicialmente
-    private int posVarBinary;
+    int posVarBinary = 4 + (numCities * 2);
     LpSolve lp;
-    private int Ncol, j, ret, M, Mobj = 0; //j es usada para indicar la columna de una variable en la matriz simplex
+    int Ncol, j, ret, M, Mobj = 0; //j es usada para indicar la columna de una variable en la matriz simplex
 
-    
-    
-    //--------Variables para imprimir ///
-    private double posXb,posYb,posXc,posYc,funcionObjetivo;
-
-    
-    
-    public Solver_basuro_ultimate() {
-    }
-
-    public void initConstant(int numCities, int sizeGrid, int[] posCities) {
-
-        this.numCities = numCities;
-        this.sizeGrid = sizeGrid;
-        this.posCities = posCities;
-
-
-
-
-        this.posDump = (numCities * 2) + 2;
-        // posiccion ciudad cercana
-        this.posNearbyCity = 4 + (numCities * 6);
-        // posicion diferencia entre ciudad cercana y basurero
-        this.posDelta = 6 + (numCities * 6);
-        // posicion variables binarias utilizadas en la funcion objetivo
-        this.posBinaryObj = (8 + (numCities * 6));
-        //posicion variables binarias que garantizan que la ciudad cercana es una de las ciudades dadas como entradas
-        this.posBinaryCity = 10 + (numCities * 6);
-        // posicion variables auxiliares que remplazaran la diferencia entre cada ciudad  y el basurero
-        this.posVarDeltaAux = 10 + (numCities * 7);
-        //posicion variables binarias que aseguraran que se escoja una  de las ciudades dadas inicialmente
-        this.posVarBinary = 4 + (numCities * 2);
-
-
-
-    }
-
-    public void init() throws LpSolveException {
-
-
-        initConstraintObvious();
-
-        Create_constraints();
-
-        Create_func_obj();
-
-        Create_sol();
-
-        Print_sol();
-
-
-    }
-
-    public void initConstraintObvious() throws LpSolveException {
+    public Solver_basuro_felipe() throws LpSolveException {
 
         int Nvar_objetive, Nvar_binary, Nvar_binaryCity, Nvar_delta_city, Nvar_delta_city_aux = 0;
         // lo maximo que puede ser un delta es el tamaño de la grilla por eso M puede ser (tamañoGrilla + 1)
@@ -116,7 +69,7 @@ public class Solver_basuro_ultimate {
         //posicion ciudad cercana  (Xc,Yc) //remplazo de las diferencias entre basurero y ciudad cercana Zx y Zy
         //binarias para sacar los valores absolutos en las distancias X y Y entre ciudad cercana y basurero Bx0 y By0
         Nvar_objetive = 10;
-
+        
         //numero de variables binarias en las restricciones:
         // 4 variables binarias para sacar los valores absolutos en las distancias X y Y entre cada ciudad y basurero Bxi y Byi
         Nvar_binary = numCities * 4;
@@ -132,7 +85,7 @@ public class Solver_basuro_ultimate {
         //total variables en el modelo
         Ncol = Nvar_objetive + Nvar_binary + Nvar_delta_city + Nvar_binaryCity + Nvar_delta_city_aux;
 
-
+        
         lp = LpSolve.makeLp(0, Ncol);
         lp.setAddRowmode(true); //sirve para construir el modelo mas rapido
 
@@ -147,8 +100,7 @@ public class Solver_basuro_ultimate {
             row[ i + posDump] = 1;
 
             lp.addConstraintex(Ncol, row, colno, LpSolve.LE, sizeGrid);
-            System.out.println("prueba " +row[0] + " - " + row[i + posDump]);
-            
+
             colno = new int[Ncol];
             row = new double[Ncol];
 
@@ -196,17 +148,17 @@ public class Solver_basuro_ultimate {
         //Se agregan las restricciones.
         lp.addConstraintex(Ncol, row2, colno2, LpSolve.EQ, 0);
         lp.addConstraintex(Ncol, row, colno, LpSolve.EQ, 0);
-
-
-
+        
+        
+        
         colno = new int[Ncol];
         row = new double[Ncol];
         colno2 = new int[Ncol];
         row2 = new double[Ncol];
-
+        
         j = 2;// vale dos por que en 0 y en 1 se encuenran los zx y zy de la funcion objetivo
         aux = 0;
-
+       
 
         for (int idCity = 1; idCity <= numCities; idCity++) {
 
@@ -221,32 +173,32 @@ public class Solver_basuro_ultimate {
             lp.setColName(j + 2, "Zy" + idCity);
             /* se crea cada restriccion del tipo (Zxia  + Zxib + Zyia + Zyib  >= Zx + Zy ) */
             /* normalizado (Zxia  + Zxib + Zyia + Zyib   - Zx - Zy >= 0 ) */
-
+            
             replace_val_abs(0);// le da los valores a los zx= x_ciudad-x_basurero aun no hace nada de valor absoluto
-
-
+            
+            
             colno[posVarDeltaAux] = posVarDeltaAux + 1;
             row[posVarDeltaAux] = 1;
             colno[posVarDeltaAux + 1] = posVarDeltaAux + 2;
             row[posVarDeltaAux + 1] = 1;
-
+            
             replace_val_abs_aux(idCity, "x");// variable X
-
+            
             j++;
-
-
-
+            
+            
+            
             replace_val_abs(1);
             colno[posVarDeltaAux] = posVarDeltaAux + 1;
             row[posVarDeltaAux] = 1;
             colno[posVarDeltaAux + 1] = posVarDeltaAux + 2;
             row[posVarDeltaAux + 1] = 1;
             replace_val_abs_aux(idCity, "y");// variable Y
-
-
+            
+            
             j++;
-
-
+            
+            
             lp.addConstraintex(Ncol, row, colno, LpSolve.GE, 0);
             colno = new int[Ncol];
             row = new double[Ncol];
@@ -254,8 +206,8 @@ public class Solver_basuro_ultimate {
             lp.setBinary(posBinaryCity + idCity, true);
             aux++;
             aux++;
-            colno2[posBinaryCity + idCity] = posBinaryCity + idCity;
-            row2[posBinaryCity + idCity] = 1;
+            colno2[posBinaryCity + idCity ] = posBinaryCity + idCity ;
+            row2[posBinaryCity + idCity ] = 1;
 
 
         }
@@ -279,22 +231,22 @@ public class Solver_basuro_ultimate {
         /* lo mismo para la variable Y  */
         /* se crea la restriccion  (  Bxia + Bxib = 1 )  */
         /* se crea la restriccion  (  Byia + Byib = 1 )  */
-
+        
         //---------------------------------------------------------------------------
         int[] colno2 = new int[Ncol];
         double[] row2 = new double[Ncol];
-
+        
         colno2[ posVarDeltaAux] = posVarDeltaAux + 1;
         row2[ posVarDeltaAux] = -1;//Zxia
-
-        colno2[ posVarBinary] = posVarBinary + 1;
+       
+        colno2[ posVarBinary] = posVarBinary+1;
         row2[ posVarBinary] = M;//Bxia
-
+        
         // M*Bxia - Zxia >= 0
-
-
+        
+        
         //-------------------------------------------------------------------
-
+        
         int[] colno = new int[Ncol];
         double[] row = new double[Ncol];
 
@@ -302,66 +254,106 @@ public class Solver_basuro_ultimate {
         colno[j] = j + 1;
         row[j] = 1;//Zxi
 
-        colno[posVarDeltaAux] = posVarDeltaAux + 1;
+         colno[posVarDeltaAux] = posVarDeltaAux + 1;
         row[posVarDeltaAux] = -1;//Zxia
-
+        
         posVarDeltaAux++;//Zxib
-
+        
         colno[posVarDeltaAux] = posVarDeltaAux + 1;
         row[posVarDeltaAux] = 1;//Zxib
         // (Zxi - Zxia +  Zxib  =  0 )
-
-        //--------------------------------------------------------------------------------------------------- 
-
-
+        
+       //--------------------------------------------------------------------------------------------------- 
+        
+      
         int[] colno3 = new int[Ncol];
         double[] row3 = new double[Ncol];
-
+        
         colno3[ posVarBinary] = posVarBinary + 1;
         row3[ posVarBinary] = 1;// Bxia 
-
+        
         posVarBinary++;
-
+        
         colno3[ posVarBinary] = posVarBinary + 1;
         row3[ posVarBinary] = 1;//Bxib 
-
-
+        
+        
         // (  Bxia + Bxib = 1 ) 
-
-
+        
+        
         //-------------------------------------------------------------------------------------------------
         lp.setColName(posVarBinary, "B" + typeVar + idCity + "a");// como en la matriz del lp no cuenta desde 0 posVarBinary  se le hizo ++ arriba pa apuntar Bxib pero en el lp apunta Bxia solo indices
         lp.setBinary(posVarBinary, true);
-
+        
         lp.setColName(posVarDeltaAux, "Z" + typeVar + idCity + "a");// igual que posVarBinary tambien se le hizo ++ arriba  a posVarDeltaAux
         lp.addConstraintex(Ncol, row2, colno2, LpSolve.GE, 0);
         //----------------------------------------------------------------------------------------------------------
+        
 
-
-        int[] colno4 = new int[Ncol];
+         int[] colno4 = new int[Ncol];
         double[] row4 = new double[Ncol];
-
+        
         colno4[ posVarDeltaAux] = posVarDeltaAux + 1;
         row4[ posVarDeltaAux] = -1;
-
-
-        colno4[ posVarBinary] = posVarBinary + 1;
+            
+        
+        colno4[ posVarBinary] = posVarBinary+1;
         row4[ posVarBinary] = M;
-
+        
         //(M*Bxib - Zxib >= 0 ) 
         posVarBinary++;
         posVarDeltaAux++;
         //----------------------------------------------------
-
+        
         lp.setColName(posVarBinary, "B" + typeVar + idCity + "b");
         lp.setBinary(posVarBinary, true);
         lp.setColName(posVarDeltaAux, "Z" + typeVar + idCity + "b");
         lp.addConstraintex(Ncol, row4, colno4, LpSolve.GE, 0);
         lp.addConstraintex(Ncol, row, colno, LpSolve.EQ, 0);
         lp.addConstraintex(Ncol, row3, colno3, LpSolve.EQ, 1);
+        
+       
 
+       /* colno2[ posVarDeltaAux] = posVarDeltaAux + 1;
+        row2[ posVarDeltaAux] = -1;
+       
+        colno2[ posVarBinary] = posVarBinary+1;
+        row2[ posVarBinary++] = M;
 
+        
+        colno[posVarDeltaAux] = posVarDeltaAux + 1;
+        row[posVarDeltaAux++] = -1;
+       
 
+        lp.setColName(posVarBinary, "B" + typeVar + idCity + "a");
+        lp.setBinary(posVarBinary, true);
+
+        lp.setColName(posVarDeltaAux, "Z" + typeVar + idCity + "a");
+        lp.addConstraintex(Ncol, row2, colno2, LpSolve.GE, 0);
+
+        colno2 = new int[Ncol];
+        row2 = new double[Ncol];
+
+        colno2[ posVarDeltaAux] = posVarDeltaAux + 1;
+        row2[ posVarDeltaAux] = -1;
+        
+        colno3[ posVarBinary] = posVarBinary + 1;
+        row3[ posVarBinary] = 1;
+        
+        colno2[ posVarBinary] = posVarBinary+1;
+        row2[ posVarBinary++] = M;
+        
+        colno[posVarDeltaAux] = posVarDeltaAux + 1;
+        row[posVarDeltaAux++] = 1;
+        
+       
+
+        lp.setColName(posVarBinary, "B" + typeVar + idCity + "b");
+        lp.setBinary(posVarBinary, true);
+        lp.setColName(posVarDeltaAux, "Z" + typeVar + idCity + "b");
+        lp.addConstraintex(Ncol, row2, colno2, LpSolve.GE, 0);
+        lp.addConstraintex(Ncol, row, colno, LpSolve.EQ, 0);
+        lp.addConstraintex(Ncol, row3, colno3, LpSolve.EQ, 1);*/
 
     }
 
@@ -447,7 +439,7 @@ public class Solver_basuro_ultimate {
              * (dx + MB + Zx <= M)
              * (dx  <= Zx) ------> (dx - Zx <= 0)
              * (-dx  <= Zx)  ------> (-dx - Zx <= 0)
-             lo mismo para la Y*/
+            lo mismo para la Y*/
 
             colno[i + posDelta] = 1 + i + posDelta;
             row[ i + posDelta] = 1;
@@ -502,10 +494,6 @@ public class Solver_basuro_ultimate {
 
     void Create_sol() throws LpSolveException {
 
-        //B&B
-        lp.setBbRule(LpSolve.NODE_DEPTHFIRSTMODE);
-        lp.setBbFloorfirst(LpSolve.BRANCH_FLOOR);
-
         //generar modelo en formato lp
         lp.writeLp("modelFelipe.lp");
 
@@ -525,93 +513,39 @@ public class Solver_basuro_ultimate {
 
     void Print_sol() throws LpSolveException {
 
-        //lp.printLp();
+         lp.printLp();
         System.out.println("Objective value: " + lp.getObjective());
 
-        funcionObjetivo=lp.getObjective();
 
-        
         double[] row = new double[Ncol];
         lp.getVariables(row);
-        System.out.println("columnas lp " + lp.getNcolumns() + " ncol " + Ncol);
-
+        System.out.println("columnas lp "+lp.getNcolumns() +" ncol " +Ncol );
+        
         for (j = 0; j < Ncol; j++) {
-            
             System.out.println(lp.getColName(j + 1) + ": " + row[j]);
-            
-            if (lp.getColName(j + 1).equals("Xc")){  posXc=row[j];}
-            else if (lp.getColName(j + 1).equals("Yc")){ posYc=row[j];}
-            else if (lp.getColName(j + 1).equals("Xb")){ posXb=row[j];}
-            else if (lp.getColName(j + 1).equals("Yb")){ posYb=row[j];}
-            
-            
-            
         }
 
         lp.deleteLp();
 
     }
-    
-    
-    
-    public double getPosXb() {
-        return posXb;
-    }
 
-    public void setPosXb(double posXb) {
-        this.posXb = posXb;
-    }
 
-    public double getPosYb() {
-        return posYb;
-    }
+    public static void main(String[] args) {
 
-    public void setPosYb(double posYb) {
-        this.posYb = posYb;
-    }
-
-    public double getPosXc() {
-        return posXc;
-    }
-
-    public void setPosXc(double posXc) {
-        this.posXc = posXc;
-    }
-
-    public double getPosYc() {
-        return posYc;
-    }
-
-    public void setPosYc(double posYc) {
-        this.posYc = posYc;
-    }
-
-    public double getFuncionObjetivo() {
-        return funcionObjetivo;
-    }
-
-    public void setFuncionObjetivo(double funcionObjetivo) {
-        this.funcionObjetivo = funcionObjetivo;
-    }
-
-    public static void main(String args[]) {
 
 
         try {
-            int numCities = 4;
-            int sizeGrid = 10;
-            int posCities[] = {3, 7, 5, 6, 10, 6, 8, 10};
 
-            Solver_basuro_ultimate solv = new Solver_basuro_ultimate();
-            solv.initConstant(numCities, sizeGrid, posCities);
-            solv.init();
-            
-            System.out.println( "objetivo "+solv.getFuncionObjetivo()+"  Xb "+ solv.getPosXb()+" Yb "+solv.getPosYb()+" Xc "+solv.getPosXc()+"Yc"+solv.getPosYc());
+
+            Solver_basuro_felipe obj = new Solver_basuro_felipe();
+            obj.Create_constraints();
+            obj.Create_func_obj();
+            obj.Create_sol();
+            obj.Print_sol();
+
         } catch (LpSolveException e) {
             e.printStackTrace();
         }
-
-
-
+        // TODO code application logic here
     }
 }

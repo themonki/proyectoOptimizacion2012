@@ -147,8 +147,7 @@ public class Solver_basuro_ultimate {
             row[ i + posDump] = 1;
 
             lp.addConstraintex(Ncol, row, colno, LpSolve.LE, sizeGrid);
-            System.out.println("prueba " +row[0] + " - " + row[i + posDump]);
-            
+
             colno = new int[Ncol];
             row = new double[Ncol];
 
